@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +21,10 @@ import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+
+import com.mdr.Props;
+import com.mdr.task.annotations.Executer;
+import com.mdr.task.annotations.Task;
 
 public class TaskLoader {
 
@@ -101,12 +107,12 @@ public class TaskLoader {
         return taskPaths;
     }
 
-    public List<Task> loadTasks() {
+    public List<TaskRecord> loadTasks() {
         List<String> taskPaths = new ArrayList<>();
         taskPaths.addAll(loadTasksPathsFromJson());
         taskPaths.addAll(loadTaskPathsFromFolder());
 
-        List<Task> tasks = new ArrayList<>();
+        List<TaskRecord> tasks = new ArrayList<>();
         for (String string : taskPaths) {
 
             // 1. Obtain the JAR file path
@@ -121,15 +127,34 @@ public class TaskLoader {
                 // Configure Reflections to scan the JAR
                 Reflections reflections = new Reflections(new ConfigurationBuilder()
                         .setUrls(ClasspathHelper.forClassLoader(classLoader))
-                        .setScanners(Scanners.SubTypes));
+                        .setScanners(Scanners.TypesAnnotated));
 
                 // Get all classes annotated with MyAnnotation.class
-                Set<Class<? extends Task>> taskSubtypes = reflections.getSubTypesOf(Task.class);
+                Set<Class<?>> taskSubtypes = reflections.getTypesAnnotatedWith(com.mdr.task.annotations.Task.class);
 
                 // Process the found classes
-                for (Class<? extends Task> clazz : taskSubtypes) {
-                    Task task = clazz.getDeclaredConstructor().newInstance();
-                    tasks.add(task);
+                for (Class<?> clazz : taskSubtypes) {
+                    Task taskAnnotation = clazz.getAnnotation(Task.class);
+                    TaskRecord task = Arrays.stream(clazz.getMethods())
+                            .filter(method -> method.isAnnotationPresent(Executer.class))
+                            .map(method -> new TaskRecord(
+                                    taskAnnotation.name(),
+                                    LocalDateTime.parse(taskAnnotation.startTime(),
+                                            Props.DATE_FORMAT.get()),
+                                    taskAnnotation.interval(),
+                                    (Runnable) () -> {
+                                        try {
+                                            method.invoke(clazz.getDeclaredConstructor().newInstance());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (task != null) {
+                        tasks.add(task);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -143,7 +168,6 @@ public class TaskLoader {
                 }
             }
         }
-
         return tasks;
     }
 }

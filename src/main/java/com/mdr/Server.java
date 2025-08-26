@@ -1,7 +1,6 @@
 package com.mdr;
 
 import com.mdr.task.TaskLoader;
-import com.mdr.task.TestTask;
 
 public class Server {
     public static void main(String[] args) {

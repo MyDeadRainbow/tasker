@@ -2,20 +2,29 @@ package com.mdr.task;
 
 import java.time.LocalDateTime;
 
-public class TestTask implements Task {
+import com.mdr.Props;
+import com.mdr.task.annotations.Executer;
+import com.mdr.task.annotations.Task;
 
-    @Override
-    public LocalDateTime getStartTime() {
-        return LocalDateTime.now().plusSeconds(5);
-    }
+@Task(name = "Test Task", startTime = "2023-10-01 10:00:00", interval = 10)
+public class TestTask {
 
-    @Override
-    public int getInterval() {
-        return 10;
-    }
-
-    @Override
+    @Executer
     public void execute() {
-        System.out.println("Executing test task");
+        System.out.println("Executing Test Task at "
+                + LocalDateTime.now().format(Props.DATE_FORMAT.get()));
+    }
+
+    @Override
+    public String toString() {
+        Task task = this.getClass().getAnnotation(Task.class);
+        if (task != null) {
+            return "TestTask{" +
+                    "name='" + task.name() + '\'' +
+                    ", startTime='" + task.startTime() + '\'' +
+                    ", interval=" + task.interval() +
+                    '}';
+        }
+        return "TestTask";
     }
 }

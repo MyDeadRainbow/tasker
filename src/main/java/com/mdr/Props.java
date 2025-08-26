@@ -5,10 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
-public enum Props {
-    APP_PORT("server.port", "12980"),
+public class Props<T> {
+    public static final Props<Integer> APP_PORT = new Props<>("server.port", 12980);
+    public static final Props<DateTimeFormatter> DATE_FORMAT = new Props<>("date.format",
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     // DATABASE_URL("database.url", "jdbc:mysql://localhost:3306/mydb"),
     // DATABASE_USER("database.user", "user"),
     // DATABASE_PASSWORD("database.password", "password");
@@ -34,9 +37,9 @@ public enum Props {
         }
     }
     private final String key;
-    private final String defaultValue;
+    private final T defaultValue;
 
-    Props(String key, String defaultValue) {
+    private Props(String key, T defaultValue) {
         this.key = key;
         this.defaultValue = defaultValue;
     }
@@ -45,17 +48,24 @@ public enum Props {
         return key;
     }
 
-    public String getDefaultValue() {
+    public T getDefaultValue() {
         return defaultValue;
     }
 
-    public String getValue() {
-        return properties.getProperty(key, defaultValue);
+    public T get() {
+        String value = properties.getProperty(key, defaultValue.toString());
+        @SuppressWarnings("unchecked")
+        T parsedValue = switch (defaultValue) {
+            case Integer _ -> (T) Integer.valueOf(value);
+            case DateTimeFormatter _ -> (T) DateTimeFormatter.ofPattern(value);
+            default -> (T) value;
+        };
+        return parsedValue;
     }
 
-    public int getInt() {
-        return Integer.parseInt(properties.getProperty(key, defaultValue));
-    }
+    // public int getInt() {
+    // return Integer.parseInt(properties.getProperty(key, defaultValue));
+    // }
 
     public void setValue(String value) {
         properties.setProperty(key, value);
@@ -69,4 +79,9 @@ public enum Props {
             e.printStackTrace();
         }
     }
+}
+
+interface Gen<T> {
+
+    public abstract T getValue();
 }
