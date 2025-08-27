@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -11,64 +13,94 @@ import javax.lang.model.type.NullType;
 
 import com.mdr.Props;
 
-public enum Actions implements Argument<NullType> {
-    START_SERVER("-start", value -> {
-        ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
+public enum Actions implements Argument {
+    START_SERVER(new String[] { "-start" }, 1, ActionPriority.EXCLUSIVE, value -> {
+        // ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
         // processBuilder.redirectErrorStream(true);
         // processBuilder.
-        try {
-            Process process = processBuilder.start();
-            Props.SERVER_PID.set(String.valueOf(process.pid()));
+        // try {
+        //     Process process = processBuilder.start();
+        //     Props.SERVER_PID.set(String.valueOf(process.pid()));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
+    }, (errorMessage) -> {
+        System.out.println("Error occurred while processing start command: " + errorMessage);
     }),
-    STOP_SERVER("-stop", value -> {
+    STOP_SERVER(new String[] { "-stop" }, 1, ActionPriority.EXCLUSIVE, value -> {
         System.out.println(value);
-        return null;
+    }, (errorMessage) -> {
+        System.out.println("Error occurred while processing stop command: " + errorMessage);
     }),
-    ADD("-add", value -> {
+    ADD(new String[] { "-add", "-a" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        return null;
+    }, (errorMessage) -> {
+        System.out.println("Error occurred while processing add command: " + errorMessage);
     }),
-    REMOVE("-remove", value -> {
+    REMOVE(new String[] { "-remove", "-rm" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        return null;
+    }, (errorMessage) -> {
+        System.out.println("Error occurred while processing remove command: " + errorMessage);
+    }),
+    HELP(new String[] { "-help", "-h" }, 1, ActionPriority.HIGH, value -> {
+        System.out.println("Help command invoked");
+    }, (errorMessage) -> {
+        System.out.println("Error occurred while processing help command: " + errorMessage);
+    }),
+    EMPTY(new String[] {}, 1, ActionPriority.LOW, value -> {
+        System.out.println("No command provided. Use -help for assistance.");
+    }, (errorMessage) -> {
+        System.out.println("Error occurred while processing empty command: " + errorMessage);
     });
 
-    private final String prefix;
-    private final Function<String, NullType> process;
+    private final String[] identifiers;
+    public final Consumer<String> process;
+    public final Consumer<String> onError;
+    private final ActionPriority priority;
+    private final int parts;
 
-    Actions(String prefix, Function<String, NullType> process) {
-        this.prefix = prefix;
+    Actions(String[] identifiers, int parts, ActionPriority priority, Consumer<String> process,
+            Consumer<String> onError) {
+        this.identifiers = identifiers;
+        this.parts = parts;
         this.process = process;
+        this.priority = priority;
+        this.onError = onError;
     }
 
     @Override
-    public String getPrefix() {
-        return prefix;
+    public String[] getIdentifiers() {
+        return identifiers;
+    }
+
+    @Override
+    public int getParts() {
+        return parts;
+    }
+
+    @Override
+    public ActionPriority getPriority() {
+        return priority;
+    }
+
+    @Override
+    public void process(String value) {
+        process.accept(value);
     }
 
     // @Override
-    // public String getValue() {
-    //     return value;
+    // public boolean equals(Object obj) {
+    //     if (this == obj) return true;
+    //     if (obj == null || getClass() != obj.getClass()) return false;
+    //     Actions other = (Actions) obj;
+    //     return Arrays.equals(identifiers, other.identifiers);
     // }
-
-    @Override
-    public Function<String, NullType> getProcess() {
-        return process;
-    }
-
-    @Override
-    public NullType process(String value) {
-        return process.apply(value);
-    }
 
     public static Actions getByPrefix(String prefix) {
         for (Actions action : Actions.values()) {
-            if (action.getPrefix().equals(prefix)) {
+            if (Arrays.stream(action.getIdentifiers())
+                    .anyMatch(identifier -> identifier.equals(prefix))) {
                 return action;
             }
         }
@@ -85,5 +117,26 @@ public enum Actions implements Argument<NullType> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+}
+
+enum ActionProperties {
+    START_SERVER(),
+    STOP_SERVER(),
+    ADD(),
+    REMOVE();
+
+    private final Properties properties;
+
+    ActionProperties() {
+        properties = new Properties();
+    }
+
+    public String get() {
+        return properties.getProperty(this.name());
+    }
+
+    public void set(String value) {
+        properties.setProperty(this.name(), value);
     }
 }
