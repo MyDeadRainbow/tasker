@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 import org.reflections.Reflections;
@@ -22,11 +24,13 @@ import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
+import com.mdr.LogFactory;
 import com.mdr.Props;
 import com.mdr.task.annotations.Executer;
 import com.mdr.task.annotations.Task;
 
 public class TaskLoader {
+    private static final Logger log = LogFactory.getLogger(TaskLoader.class);
 
     private static final String JSON = "tasks.json";
     private static final String TASK_FOLDER = "tasks";
@@ -68,13 +72,13 @@ public class TaskLoader {
                 taskPaths.add(taskPath);
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            log.severe("Error occurred when loading tasks from JSON: " + e.getMessage());
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.severe("Error occurred when closing BufferedReader: " + e.getMessage());
                 }
             }
         }
@@ -92,7 +96,7 @@ public class TaskLoader {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(TASK_FOLDER, JSON).toFile()))) {
             writer.write(json.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe("Error occurred when saving JSON file: " + e.getMessage());
         }
 
     }
@@ -100,7 +104,7 @@ public class TaskLoader {
     private List<String> loadTaskPathsFromFolder() {
         List<String> taskPaths = new ArrayList<>();
         File folder = new File(TASK_FOLDER);
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(".jar"));
+        File[] files = folder.listFiles((_, name) -> name.endsWith(".jar"));
         for (File file : files) {
             taskPaths.add(file.getAbsolutePath());
         }
@@ -136,19 +140,9 @@ public class TaskLoader {
                 for (Class<?> clazz : taskSubtypes) {
                     Task taskAnnotation = clazz.getAnnotation(Task.class);
                     TaskRecord task = Arrays.stream(clazz.getMethods())
-                            .filter(method -> method.isAnnotationPresent(Executer.class))
-                            .map(method -> new TaskRecord(
-                                    taskAnnotation.name(),
-                                    LocalDateTime.parse(taskAnnotation.startTime(),
-                                            Props.DATE_FORMAT.get()),
-                                    taskAnnotation.interval(),
-                                    (Runnable) () -> {
-                                        try {
-                                            method.invoke(clazz.getDeclaredConstructor().newInstance());
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }))
+                            .filter(method -> method.isAnnotationPresent(Executer.class)
+                                    && method.getParameterCount() == 0)
+                            .map(method -> createTaskRecord(clazz, taskAnnotation, method))
                             .findFirst()
                             .orElse(null);
 
@@ -157,17 +151,33 @@ public class TaskLoader {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.severe("Error occurred when loading tasks: " + e.getMessage());
             } finally {
                 if (classLoader != null) {
                     try {
                         classLoader.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.severe("Error occurred when closing class loader: " + e.getMessage());
                     }
                 }
             }
         }
         return tasks;
+    }
+
+    private TaskRecord createTaskRecord(Class<?> clazz, Task taskAnnotation, Method method) {
+        method.setAccessible(true);
+        return new TaskRecord(
+                taskAnnotation.name(),
+                LocalDateTime.parse(taskAnnotation.startTime(),
+                        Props.DATE_FORMAT.get()),
+                taskAnnotation.interval(),
+                (Runnable) () -> {
+                    try {
+                        method.invoke(clazz.getDeclaredConstructor().newInstance());
+                    } catch (Exception e) {
+                        log.severe("Error occurred when executing task: " + e.getMessage());
+                    }
+                });
     }
 }

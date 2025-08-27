@@ -7,15 +7,20 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
+import java.util.function.Function;
+import java.util.logging.Logger;
 
 public class Props<T> {
-    public static final Props<Integer> APP_PORT = new Props<>("server.port", 12980);
+    public static final Props<Integer> APP_PORT = new Props<>("server.port",
+            "12980", Integer::valueOf);
     public static final Props<DateTimeFormatter> DATE_FORMAT = new Props<>("date.format",
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    // DATABASE_URL("database.url", "jdbc:mysql://localhost:3306/mydb"),
-    // DATABASE_USER("database.user", "user"),
-    // DATABASE_PASSWORD("database.password", "password");
-    ;
+            "yyyy-MM-dd HH:mm:ss", DateTimeFormatter::ofPattern);
+    public static final Props<String> SERVER_PATH = new Props<>("server.path",
+            Paths.get("server.jar").toAbsolutePath().toString(), Function.identity());
+    public static final Props<String> SERVER_PID = new Props<>("server.pid",
+            "", Function.identity());
+
+    private static final Logger log = LogFactory.getLogger(Props.class);
 
     private static final String PROPS_FILE = "application.properties";
     private static final String PATH = Paths.get("").toAbsolutePath().toString();
@@ -27,47 +32,47 @@ public class Props<T> {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.severe("Error occurred when creating properties file: " + e.getMessage());
             }
         }
         try (FileInputStream fis = new FileInputStream(file)) {
             properties.load(fis);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe("Error occurred when loading properties file: " + e.getMessage());
         }
     }
     private final String key;
-    private final T defaultValue;
+    private final String defaultValue;
+    private final Function<String, T> parser;
 
-    private Props(String key, T defaultValue) {
+    private Props(String key, String defaultValue, Function<String, T> parser) {
         this.key = key;
         this.defaultValue = defaultValue;
+        this.parser = parser;
     }
 
     public String getKey() {
         return key;
     }
 
-    public T getDefaultValue() {
+    public String getDefaultValue() {
         return defaultValue;
     }
 
     public T get() {
-        String value = properties.getProperty(key, defaultValue.toString());
-        @SuppressWarnings("unchecked")
-        T parsedValue = switch (defaultValue) {
-            case Integer _ -> (T) Integer.valueOf(value);
-            case DateTimeFormatter _ -> (T) DateTimeFormatter.ofPattern(value);
-            default -> (T) value;
-        };
-        return parsedValue;
+        String value = properties.getProperty(key);
+        if (value == null) {
+            value = defaultValue;
+            set(value);
+        }
+        return parser.apply(value);
     }
 
     // public int getInt() {
     // return Integer.parseInt(properties.getProperty(key, defaultValue));
     // }
 
-    public void setValue(String value) {
+    public void set(String value) {
         properties.setProperty(key, value);
         Thread.ofVirtual().start(() -> saveProperties());
     }
@@ -76,7 +81,7 @@ public class Props<T> {
         try (FileOutputStream fos = new FileOutputStream(new File(PATH, PROPS_FILE))) {
             properties.store(fos, null);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe("Error occurred when saving properties file: " + e.getMessage());
         }
     }
 }
