@@ -54,10 +54,10 @@ public class CommandListener {
 
     
     public enum Commands {
-        START(_ -> {
+        START(v -> {
             System.out.println("Starting...");
         }),
-        STOP(_ -> {
+        STOP(v -> {
             log.info("Stopping...");
             try (BufferedWriter clientOutput = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
                 clientOutput.write("Stopping...");
