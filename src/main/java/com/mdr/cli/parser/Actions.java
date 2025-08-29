@@ -17,9 +17,8 @@ import com.mdr.cli.CommandListener;
 
 public enum Actions implements Argument {
     START_SERVER(new String[] { "-start" }, 1, ActionPriority.EXCLUSIVE, value -> {
-        ProcessBuilder processBuilder = new ProcessBuilder("serv.bat");//new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
-        processBuilder.directory(Paths.get("").toAbsolutePath().toFile());
-        processBuilder.redirectErrorStream(true);
+        ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
+        // processBuilder.directory(Paths.get("").toAbsolutePath().toFile());
         try {
             Process process = processBuilder.start();
             Props.SERVER_PID.set(String.valueOf(process.pid()));

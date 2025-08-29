@@ -12,11 +12,11 @@ import com.mdr.cli.parser.Actions;
 public class Client {
     public static void main(String[] args) {
         args = List.of(
-        "-start"
+        // "-start"
         // , 
         // "-stop"
         //,
-        // "-add", "G:\\Projects\\tasker\\tasker.jar"//<jarPath> [overrideStartTime] [overrideInterval]"
+        "-add", "G:\\Projects\\tasker\\tasker.jar"//<jarPath> [overrideStartTime] [overrideInterval]"
         ).toArray(String[]::new);
 
         Map<Actions, String> actions = parseArgs(args);

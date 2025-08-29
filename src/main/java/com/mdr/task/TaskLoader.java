@@ -63,6 +63,7 @@ public class TaskLoader {
             if (!file.exists()) {
                 System.out.println("Creating new JSON file: " + file.getAbsolutePath());
                 log.info("Creating new JSON file: " + file.getAbsolutePath());
+                file.getParentFile().mkdirs();
                 file.createNewFile();
             }
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(
