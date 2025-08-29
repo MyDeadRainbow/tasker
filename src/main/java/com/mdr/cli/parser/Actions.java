@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.function.Consumer;
@@ -12,34 +13,37 @@ import java.util.function.Function;
 import javax.lang.model.type.NullType;
 
 import com.mdr.Props;
+import com.mdr.cli.CommandListener;
 
 public enum Actions implements Argument {
     START_SERVER(new String[] { "-start" }, 1, ActionPriority.EXCLUSIVE, value -> {
-        // ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
-        // processBuilder.redirectErrorStream(true);
-        // processBuilder.
-        // try {
-        //     Process process = processBuilder.start();
-        //     Props.SERVER_PID.set(String.valueOf(process.pid()));
+        ProcessBuilder processBuilder = new ProcessBuilder("serv.bat");//new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
+        processBuilder.directory(Paths.get("").toAbsolutePath().toFile());
+        processBuilder.redirectErrorStream(true);
+        try {
+            Process process = processBuilder.start();
+            Props.SERVER_PID.set(String.valueOf(process.pid()));
 
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing start command: " + errorMessage);
     }),
     STOP_SERVER(new String[] { "-stop" }, 1, ActionPriority.EXCLUSIVE, value -> {
-        System.out.println(value);
+        sendCommand(CommandListener.Commands.STOP + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing stop command: " + errorMessage);
     }),
     ADD(new String[] { "-add", "-a" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
+        Actions.sendCommand(CommandListener.Commands.ADD + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing add command: " + errorMessage);
     }),
     REMOVE(new String[] { "-remove", "-rm" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
+        Actions.sendCommand(CommandListener.Commands.REMOVE + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing remove command: " + errorMessage);
     }),
@@ -91,10 +95,10 @@ public enum Actions implements Argument {
 
     // @Override
     // public boolean equals(Object obj) {
-    //     if (this == obj) return true;
-    //     if (obj == null || getClass() != obj.getClass()) return false;
-    //     Actions other = (Actions) obj;
-    //     return Arrays.equals(identifiers, other.identifiers);
+    // if (this == obj) return true;
+    // if (obj == null || getClass() != obj.getClass()) return false;
+    // Actions other = (Actions) obj;
+    // return Arrays.equals(identifiers, other.identifiers);
     // }
 
     public static Actions getByPrefix(String prefix) {
@@ -107,7 +111,7 @@ public enum Actions implements Argument {
         return null; // or throw an exception if preferred
     }
 
-    private void sendCommand(String command) {
+    private static void sendCommand(String command) {
         try (Socket clientSocket = new Socket("localhost", Props.APP_PORT.get())) {
             BufferedWriter clientOutput = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             System.out.println("Sending command: " + command);

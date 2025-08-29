@@ -1,0 +1,122 @@
+package com.mdr.cli;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.logging.Logger;
+
+import com.mdr.LogFactory;
+import com.mdr.Props;
+import com.mdr.task.TaskLoader;
+
+public class CommandListener {
+    private static final Logger log = LogFactory.getLogger(CommandListener.class);
+    private static Socket clientSocket;
+    public void start() {
+        Thread.ofPlatform().name("app-listener").start(() -> {
+            try (ServerSocket serverSocket = new ServerSocket(0)) {
+                log.info("App listening on port: " + serverSocket.getLocalPort());
+                System.out.println("App listening on port: " + serverSocket.getLocalPort());
+                Props.APP_PORT.set(String.valueOf(serverSocket.getLocalPort()));
+                do  {
+                    clientSocket = serverSocket.accept();                    
+                    if (clientSocket != null && clientSocket.isClosed()) {
+                        clientSocket = null;
+                        continue;
+                    }
+                    BufferedReader clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    String command = clientInput.readLine();
+                    log.info("Received command: " + command);
+                    String[] parts = command.split(" ");                    
+                    Commands cmd = Commands.getByName(parts[0]);
+                    if (cmd == null) {
+                        log.warning("Unknown command: " + parts[0]);
+                    } else {
+                        if (parts.length > 1) {
+                            cmd.execute(Arrays.copyOfRange(parts, 1, parts.length));
+                        } else {
+                            cmd.execute(new String[]{});
+                        }
+                    }
+                    // Handle client cli commands
+                } while (clientSocket != null && !clientSocket.isClosed());
+            } catch (IOException e) {
+                log.severe("Error occurred: " + e.getMessage());
+            }
+        });
+    }
+
+    
+    public enum Commands {
+        START(_ -> {
+            System.out.println("Starting...");
+        }),
+        STOP(_ -> {
+            log.info("Stopping...");
+            try (BufferedWriter clientOutput = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
+                clientOutput.write("Stopping...");
+                clientOutput.newLine();
+                clientOutput.flush();
+                if (clientSocket != null && !clientSocket.isClosed()) {
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+
+        }),
+        ADD(value -> {
+            log.info("Adding: " + Arrays.toString(value));
+
+            String jarPath = value[0];
+            String overrideStartTime;
+            Integer overrideInterval;
+            if (value.length > 1) {
+                overrideStartTime = value[1];
+            } else {
+                overrideStartTime = null;
+            }
+            if (value.length > 2) {
+                overrideInterval = Integer.parseInt(value[2]);
+            } else {
+                overrideInterval = null;
+            }
+            // Add the task to the TaskLoader
+            new TaskLoader().addTasksFromJar(jarPath, overrideStartTime, overrideInterval);
+        }),
+        REMOVE(value -> {
+            System.out.println("Removing: " + Arrays.toString(value));
+        })
+        ;
+
+        Consumer<String[]> command;
+
+        Commands(Consumer<String[]> command) {
+            this.command = command;
+        }
+
+        public void execute(String[] value) {
+            command.accept(value);
+        }
+
+        public static Commands getByName(String name) {
+            for (Commands command : Commands.values()) {
+                if (command.name().equalsIgnoreCase(name)) {
+                    return command;
+                }
+            }
+            return null;
+        }
+    }
+}

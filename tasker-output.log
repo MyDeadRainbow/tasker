@@ -1,0 +1,36 @@
+Aug 28, 2025 3:30:22 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 53963
+Aug 28, 2025 3:33:27 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 63369
+Aug 29, 2025 7:55:35 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 49988
+Aug 29, 2025 7:56:40 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 59092
+Aug 29, 2025 7:57:09 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 59098
+Aug 29, 2025 7:58:17 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 60634
+Aug 29, 2025 7:58:59 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 60646
+Aug 29, 2025 7:59:55 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 57799
+Aug 29, 2025 8:01:46 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 55675
+Aug 29, 2025 8:02:46 PM com.mdr.cli.CommandListener lambda$0
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 29, 2025 8:02:46 PM com.mdr.cli.CommandListener$Commands lambda$2
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 29, 2025 8:18:08 PM com.mdr.task.TaskLoader loadTasks
+SEVERE: Error occurred when loading tasks from JSON: The system cannot find the path specified
+Aug 29, 2025 8:18:08 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 61865
+Aug 29, 2025 8:20:46 PM com.mdr.cli.CommandListener lambda$0
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 29, 2025 8:20:46 PM com.mdr.cli.CommandListener$Commands lambda$2
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 29, 2025 8:44:44 PM com.mdr.task.TaskLoader loadJson
+INFO: Creating new JSON file: G:\Projects\tasker\tasks\tasks.json
+Aug 29, 2025 8:44:44 PM com.mdr.task.TaskLoader loadTasks
+SEVERE: Error occurred when loading tasks from JSON: The system cannot find the path specified
+Aug 29, 2025 8:44:44 PM com.mdr.cli.CommandListener lambda$0
+INFO: App listening on port: 49985
