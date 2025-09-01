@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>24</maven.compiler.source>
+        <maven.compiler.target>24</maven.compiler.target>
     </properties>
 
 
@@ -37,24 +37,61 @@
 
     <build>
         <plugins>
-            <!-- <plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <id>shade-server</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>fat</shadedClassifierName>
+                            <!-- <artifactSet>
+                                <includes>
+                                    <include>com.mdr:tasker</include>
+                                </includes>
+                            </artifactSet> -->
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+
+                                    <!-- <artifact>org.json:json</artifact>
+                                    <artifact>org.reflections:reflections</artifact> -->
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.mdr.Server</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                    <annotationProcessors>
-                        <annotationProcessor>com.mdr.task.annotations.ExecuterProcessor</annotationProcessor>
-                    </annotationProcessors>
                 </configuration>
-            </plugin> -->
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.1</version>
                 <executions>
-                    <!-- Build tasker.jar: no entry point -->
                     <execution>
                         <id>default-jar</id>
                         <phase>package</phase>
@@ -64,12 +101,10 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <!-- No Main-Class for tasker.jar -->
                                 </manifest>
                             </archive>
                         </configuration>
                     </execution>
-                    <!-- Build server.jar: entry point com.mdr.Server, classifier 'server' -->
                     <execution>
                         <id>server-jar</id>
                         <phase>package</phase>
@@ -98,7 +133,7 @@
                         <configuration>
                             <target>
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.basedir}/tasker.jar" overwrite="true" />
-                                <copy file="${project.build.directory}/${project.build.finalName}-server.jar" tofile="${project.basedir}/server.jar" overwrite="true" />
+                                <copy file="${project.build.directory}/${project.build.finalName}-fat.jar" tofile="${project.basedir}/server.jar" overwrite="true" />
                             </target>
                         </configuration>
                         <goals>

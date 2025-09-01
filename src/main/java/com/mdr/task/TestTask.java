@@ -10,7 +10,7 @@ import com.mdr.task.annotations.Task;
 public class TestTask {
 
     @Executer
-    public void execute(String str) {
+    public void execute() {
         System.out.println("Executing Test Task at "
                 + LocalDateTime.now().format(Props.DATE_FORMAT.get()));
     }

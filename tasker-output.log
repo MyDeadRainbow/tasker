@@ -44,3 +44,785 @@ Aug 29, 2025 9:34:40 PM com.mdr.cli.CommandListener lambda$0
 INFO: Received command: ADD G:\Projects\tasker\tasker.jar
 Aug 29, 2025 9:34:40 PM com.mdr.cli.CommandListener$Commands lambda$2
 INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 2:43:32 PM com.mdr.cli.CommandListener lambda$start$0
+INFO: App listening on port: 63065
+Aug 30, 2025 2:57:43 PM com.mdr.Log info
+INFO: App listening on port: 57816
+Aug 30, 2025 2:58:12 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 2:58:12 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:04:29 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:04:34 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:06:20 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:06:53 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:07:34 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:08:15 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:12:17 PM com.mdr.Log info
+INFO: App listening on port: 52678
+Aug 30, 2025 3:13:01 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:13:05 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:13:05 PM com.mdr.Log warning
+WARNING: Failed to add task from JAR: G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:14:02 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:14:10 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:15:55 PM com.mdr.Log warning
+WARNING: Failed to add task from JAR: G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:16:04 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:16:06 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:16:15 PM com.mdr.Log warning
+WARNING: Failed to add task from JAR: G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:17:40 PM com.mdr.Log info
+INFO: App listening on port: 58074
+Aug 30, 2025 3:17:47 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:17:48 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:18:32 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:18:32 PM com.mdr.Log info
+INFO: Task added successfully: TaskRecord[jarPath=G:\Projects\tasker\tasker.jar, name=Test Task, startTime=2023-10-01T10:00, interval=10, task=com.mdr.task.TaskLoader$$Lambda/0x000002b21802c260@4d29baf2]
+Aug 30, 2025 3:18:42 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:18:52 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:19:02 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:46:14 PM com.mdr.Log info
+INFO: Creating new JSON file: G:\Projects\tasker\tasks\tasks.json
+Aug 30, 2025 3:46:14 PM com.mdr.Log info
+INFO: App listening on port: 62241
+Aug 30, 2025 3:46:46 PM com.mdr.Log info
+INFO: Received command: ADD G:\Projects\tasker\tasker.jar
+Aug 30, 2025 3:46:46 PM com.mdr.Log info
+INFO: Adding: [G:\Projects\tasker\tasker.jar]
+Aug 30, 2025 3:46:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:46:47 PM com.mdr.Log info
+INFO: Task added successfully: TaskRecord[jarPath=G:\Projects\tasker\tasker.jar, name=Test Task, startTime=2023-10-01T10:00, interval=10, task=com.mdr.task.TaskLoader$$Lambda/0x0000014c01029f90@4077651e]
+Aug 30, 2025 3:46:57 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:47:07 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:47:17 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:47:27 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:47:37 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:47:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:47:57 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:48:07 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:48:17 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:48:27 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:48:37 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:48:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:48:57 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:49:02 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 3:49:02 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 3:49:07 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:49:17 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:49:27 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:49:37 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:49:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:49:57 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:50:07 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:50:17 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:50:27 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:50:37 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:50:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:51:42 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:51:42 PM com.mdr.Log info
+INFO: App listening on port: 61603
+Aug 30, 2025 3:52:44 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 3:52:44 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 3:56:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:56:15 PM com.mdr.Log info
+INFO: App listening on port: 52665
+Aug 30, 2025 3:56:26 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 3:56:26 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 3:57:23 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 3:57:23 PM com.mdr.Log info
+INFO: App listening on port: 52686
+Aug 30, 2025 3:57:30 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 3:57:30 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:00:53 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:00:53 PM com.mdr.Log info
+INFO: App listening on port: 65339
+Aug 30, 2025 4:02:22 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:02:22 PM com.mdr.Log info
+INFO: App listening on port: 65377
+Aug 30, 2025 4:03:18 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:03:18 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:06:56 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:06:56 PM com.mdr.Log info
+INFO: App listening on port: 61793
+Aug 30, 2025 4:07:18 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:07:18 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:08:48 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:08:48 PM com.mdr.Log info
+INFO: App listening on port: 61820
+Aug 30, 2025 4:09:08 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:09:08 PM com.mdr.Log info
+INFO: App listening on port: 61831
+Aug 30, 2025 4:09:13 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:09:13 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:09:31 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:09:31 PM com.mdr.Log info
+INFO: App listening on port: 61842
+Aug 30, 2025 4:09:45 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:09:45 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:12:30 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:12:30 PM com.mdr.Log info
+INFO: App listening on port: 61902
+Aug 30, 2025 4:12:56 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:12:56 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:14:58 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:14:58 PM com.mdr.Log info
+INFO: App listening on port: 64333
+Aug 30, 2025 4:16:43 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:16:43 PM com.mdr.Log info
+INFO: App listening on port: 56062
+Aug 30, 2025 4:16:51 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:16:51 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:19:01 PM com.mdr.Log info
+INFO: App listening on port: 62051
+Aug 30, 2025 4:19:04 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:19:04 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:22:10 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:22:10 PM com.mdr.Log info
+INFO: App listening on port: 65397
+Aug 30, 2025 4:22:19 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:22:19 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:22:19 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: current thread is not owner
+java.lang.IllegalMonitorStateException: current thread is not owner
+	at java.base/java.lang.Object.notifyAll(Native Method)
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:71)
+	at com.mdr.cli.CommandListener$Commands.lambda$1(CommandListener.java:102)
+	at com.mdr.cli.CommandListener$Commands.execute(CommandListener.java:146)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:47)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 30, 2025 4:22:19 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: current thread is not owner
+java.lang.IllegalMonitorStateException: current thread is not owner
+	at java.base/java.lang.Object.notifyAll(Native Method)
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:71)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:69)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 30, 2025 4:23:04 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:23:04 PM com.mdr.Log info
+INFO: App listening on port: 54215
+Aug 30, 2025 4:23:25 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:23:25 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:23:25 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: current thread is not owner
+java.lang.IllegalMonitorStateException: current thread is not owner
+	at java.base/java.lang.Object.notifyAll(Native Method)
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:71)
+	at com.mdr.cli.CommandListener$Commands.lambda$1(CommandListener.java:102)
+	at com.mdr.cli.CommandListener$Commands.execute(CommandListener.java:146)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:47)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 30, 2025 4:23:25 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: current thread is not owner
+java.lang.IllegalMonitorStateException: current thread is not owner
+	at java.base/java.lang.Object.notifyAll(Native Method)
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:71)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:69)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 30, 2025 4:25:57 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:25:57 PM com.mdr.Log info
+INFO: App listening on port: 54646
+Aug 30, 2025 4:26:15 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:26:15 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:27:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:28:00 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:28:00 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: current thread is not owner
+java.lang.IllegalMonitorStateException: current thread is not owner
+	at java.base/java.lang.Object.notifyAll(Native Method)
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:71)
+	at com.mdr.Server.main(Server.java:13)
+
+Aug 30, 2025 4:28:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:28:47 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: current thread is not owner
+java.lang.IllegalMonitorStateException: current thread is not owner
+	at java.base/java.lang.Object.notifyAll(Native Method)
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:71)
+	at com.mdr.Server.main(Server.java:13)
+
+Aug 30, 2025 4:28:58 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:29:08 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:29:18 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:29:28 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:29:36 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:29:36 PM com.mdr.Log info
+INFO: App listening on port: 60779
+Aug 30, 2025 4:29:46 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:29:48 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:29:48 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:29:56 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:30:06 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:30:16 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:30:26 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:30:33 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:30:33 PM com.mdr.Log info
+INFO: App listening on port: 65304
+Aug 30, 2025 4:30:43 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:30:47 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 30, 2025 4:30:47 PM com.mdr.Log info
+INFO: Stopping...
+Aug 30, 2025 4:30:53 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:31:03 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:31:13 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:31:23 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:31:33 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:31:43 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:31:53 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:32:03 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:32:13 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:32:23 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:32:33 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:32:43 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:32:53 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:33:03 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:33:13 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:33:23 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 30, 2025 4:33:33 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:23:05 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:23:05 PM com.mdr.Log info
+INFO: App listening on port: 56254
+Aug 31, 2025 6:23:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:23:20 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:23:20 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:23:25 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:23:35 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:23:45 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:23:55 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:24:05 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:24:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:24:25 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:24:35 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:24:45 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:24:55 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:25:05 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:25:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:25:25 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:25:35 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:25:45 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:25:55 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:26:05 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:26:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:26:23 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:26:23 PM com.mdr.Log info
+INFO: App listening on port: 55787
+Aug 31, 2025 6:26:31 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:26:31 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:26:33 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:26:43 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:26:53 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:27:03 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:27:13 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:28:34 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:30:27 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:30:27 PM com.mdr.Log info
+INFO: App listening on port: 49918
+Aug 31, 2025 6:30:37 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:30:38 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:30:38 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:30:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:30:57 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:31:05 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:31:05 PM com.mdr.Log info
+INFO: App listening on port: 49931
+Aug 31, 2025 6:31:08 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:31:08 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:31:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:31:16 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+java.lang.NullPointerException: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:70)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:69)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 31, 2025 6:31:25 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:31:35 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:31:45 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:31:55 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:32:05 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:32:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:32:25 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:32:35 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:32:45 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:32:55 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:33:05 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:33:15 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:33:25 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:33:35 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:33:45 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:33:55 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 6:33:59 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:33:59 PM com.mdr.Log info
+INFO: App listening on port: 52190
+Aug 31, 2025 6:34:06 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:34:06 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:34:09 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:34:09 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+java.lang.NullPointerException: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:70)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:69)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 31, 2025 6:34:19 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:34:29 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:34:39 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:34:49 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:34:59 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:35:09 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:35:27 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:35:27 PM com.mdr.Log info
+INFO: App listening on port: 49910
+Aug 31, 2025 6:35:34 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:35:34 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:35:37 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+java.lang.NullPointerException: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:70)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:69)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 31, 2025 6:35:37 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:35:47 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:35:57 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:36:07 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:36:17 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:36:27 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:36:33 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:36:33 PM com.mdr.Log info
+INFO: App listening on port: 61632
+Aug 31, 2025 6:36:43 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:36:47 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:36:47 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:36:53 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:37:02 PM com.mdr.Log severe
+SEVERE: Error occurred when closing TaskScheduler: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+java.lang.NullPointerException: Cannot invoke "java.util.concurrent.ScheduledExecutorService.shutdownNow()" because "this.scheduler" is null
+	at com.mdr.TaskScheduler.close(TaskScheduler.java:75)
+	at com.mdr.cli.CommandListener.lambda$0(CommandListener.java:69)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+
+Aug 31, 2025 6:37:03 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:37:13 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:37:23 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:37:33 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:37:43 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:37:53 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:38:03 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:38:13 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:46:09 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:46:09 PM com.mdr.Log info
+INFO: App listening on port: 61956
+Aug 31, 2025 6:46:19 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:46:23 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:46:23 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:46:29 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:46:39 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:46:49 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:46:59 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:47:09 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:47:19 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:47:29 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:47:39 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:47:49 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:47:55 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:47:55 PM com.mdr.Log info
+INFO: App listening on port: 60243
+Aug 31, 2025 6:48:10 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:48:20 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:48:25 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:48:26 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:48:26 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:48:35 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:49:17 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:49:19 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:53:09 PM com.mdr.Log info
+INFO: App listening on port: 59821
+Aug 31, 2025 6:53:39 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:53:39 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:54:04 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:54:04 PM com.mdr.Log info
+INFO: App listening on port: 65148
+Aug 31, 2025 6:54:14 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:54:24 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:54:34 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:54:44 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:54:54 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:55:04 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:55:14 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:55:24 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:55:34 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:55:44 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:55:54 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:56:04 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:56:14 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:56:18 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:56:18 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:56:24 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:56:34 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:56:44 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:56:53 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:56:53 PM com.mdr.Log info
+INFO: App listening on port: 50207
+Aug 31, 2025 6:57:03 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:57:05 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:57:05 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:57:13 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:58:13 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:58:13 PM com.mdr.Log info
+INFO: App listening on port: 50514
+Aug 31, 2025 6:58:18 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:58:18 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:58:43 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:58:45 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:58:46 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:58:54 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:59:25 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:59:25 PM com.mdr.Log info
+INFO: App listening on port: 55046
+Aug 31, 2025 6:59:29 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 6:59:29 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 6:59:58 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 6:59:59 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 7:00:00 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 7:02:40 PM com.mdr.Log info
+INFO: App listening on port: 56048
+Aug 31, 2025 7:02:43 PM com.mdr.Log info
+INFO: Executing task: 
+Aug 31, 2025 7:02:48 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 7:02:48 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 7:05:39 PM com.mdr.Log info
+INFO: App listening on port: 62080
+Aug 31, 2025 7:05:40 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:06:11 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 7:06:11 PM com.mdr.Log info
+INFO: Stopping...
+Aug 31, 2025 7:06:52 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:06:52 PM com.mdr.Log info
+INFO: App listening on port: 55959
+Aug 31, 2025 7:08:32 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:08:32 PM com.mdr.Log info
+INFO: App listening on port: 55986
+Aug 31, 2025 7:10:37 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:10:37 PM com.mdr.Log info
+INFO: App listening on port: 61898
+Aug 31, 2025 7:10:47 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:10:57 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:22:52 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:22:52 PM com.mdr.Log info
+INFO: App listening on port: 52859
+Aug 31, 2025 7:23:02 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:23:12 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:23:22 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:23:22 PM com.mdr.Log info
+INFO: App listening on port: 52871
+Aug 31, 2025 7:23:32 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:23:42 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Aug 31, 2025 7:23:48 PM com.mdr.Log info
+INFO: Received command: STOP 
+Aug 31, 2025 7:23:48 PM com.mdr.Log info
+INFO: Stopping...

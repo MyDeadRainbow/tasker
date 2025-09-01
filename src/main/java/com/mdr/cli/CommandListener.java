@@ -11,18 +11,21 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-import com.mdr.LogFactory;
+import com.mdr.Log;
 import com.mdr.Props;
+import com.mdr.TaskScheduler;
 import com.mdr.task.TaskLoader;
+import com.mdr.task.TaskRecord;
 
 public class CommandListener {
-    private static final Logger log = LogFactory.getLogger(CommandListener.class);
+    private static final Log log = Log.getLogger(CommandListener.class);
+    private static ServerSocket serverSocket;
     private static Socket clientSocket;
     public void start() {
         Thread.ofPlatform().name("app-listener").start(() -> {
-            try (ServerSocket serverSocket = new ServerSocket(0)) {
+            try {
+                serverSocket = new ServerSocket(0);
                 log.info("App listening on port: " + serverSocket.getLocalPort());
-                System.out.println("App listening on port: " + serverSocket.getLocalPort());
                 Props.APP_PORT.set(String.valueOf(serverSocket.getLocalPort()));
                 do  {
                     clientSocket = serverSocket.accept();                    
@@ -45,9 +48,24 @@ public class CommandListener {
                         }
                     }
                     // Handle client cli commands
-                } while (clientSocket != null && !clientSocket.isClosed());
+                } while (clientSocket != null && !clientSocket.isClosed() && !serverSocket.isClosed());
             } catch (IOException e) {
-                log.severe("Error occurred: " + e.getMessage());
+                log.severe("Error occurred: " + e.getMessage(), e);
+            } finally {
+                if (serverSocket != null && !serverSocket.isClosed()) {
+                    try {
+                        serverSocket.close();
+                    } catch (IOException e) {
+                        log.severe("Error occurred when closing server socket: " + e.getMessage(), e);
+                    }
+                }
+                if (clientSocket != null && !clientSocket.isClosed()) {
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        log.severe("Error occurred when closing client socket: " + e.getMessage(), e);
+                    }
+                }
             }
         });
     }
@@ -67,11 +85,20 @@ public class CommandListener {
                     try {
                         clientSocket.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.severe("Error occurred when closing client socket: " + e.getMessage(), e);
+                    }
+                }
+                if (serverSocket != null && !serverSocket.isClosed()) {
+                    try {
+                        serverSocket.close();
+                    } catch (IOException e) {
+                        log.severe("Error occurred when closing server socket: " + e.getMessage(), e);
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.severe("Error occurred when stopping: " + e.getMessage(), e);
+            } finally {
+                TaskScheduler.close();
             }
             
 
@@ -93,10 +120,18 @@ public class CommandListener {
                 overrideInterval = null;
             }
             // Add the task to the TaskLoader
-            new TaskLoader().addTasksFromJar(jarPath, overrideStartTime, overrideInterval);
+            TaskRecord task = TaskLoader.addTasksFromJar(jarPath, overrideStartTime, overrideInterval);
+            if (task != null) {
+                TaskScheduler.scheduleTask(task);
+                log.info("Task added successfully: " + task);
+            } else {
+                log.warning("Failed to add task from JAR: " + jarPath);
+            }
         }),
         REMOVE(value -> {
-            System.out.println("Removing: " + Arrays.toString(value));
+            log.info("Removing: " + Arrays.toString(value));
+            String jarPath = value[0];
+            TaskScheduler.removeTask(jarPath);
         })
         ;
 

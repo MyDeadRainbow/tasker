@@ -2,6 +2,6 @@
 <project name="maven-antrun-" default="main">
   <target name="main">
     <copy file="G:\Projects\tasker\target/tasker-1.0-SNAPSHOT.jar" tofile="G:\Projects\tasker/tasker.jar" overwrite="true" />
-    <copy file="G:\Projects\tasker\target/tasker-1.0-SNAPSHOT-server.jar" tofile="G:\Projects\tasker/server.jar" overwrite="true" />
+    <copy file="G:\Projects\tasker\target/tasker-1.0-SNAPSHOT-fat.jar" tofile="G:\Projects\tasker/server.jar" overwrite="true" />
   </target>
 </project>

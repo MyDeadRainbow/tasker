@@ -20,7 +20,7 @@ public class Props<T> {
     public static final Props<String> SERVER_PID = new Props<>("server.pid",
             "", Function.identity());
 
-    private static final Logger log = LogFactory.getLogger(Props.class);
+    private static final Log log = Log.getLogger(Props.class);
 
     private static final String PROPS_FILE = "application.properties";
     private static final String PATH = Paths.get("").toAbsolutePath().toString();
@@ -32,13 +32,13 @@ public class Props<T> {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                log.severe("Error occurred when creating properties file: " + e.getMessage());
+                log.severe("Error occurred when creating properties file: " + e.getMessage(), e);
             }
         }
         try (FileInputStream fis = new FileInputStream(file)) {
             properties.load(fis);
         } catch (IOException e) {
-            log.severe("Error occurred when loading properties file: " + e.getMessage());
+            log.severe("Error occurred when loading properties file: " + e.getMessage(), e);
         }
     }
     private final String key;
@@ -81,7 +81,7 @@ public class Props<T> {
         try (FileOutputStream fos = new FileOutputStream(new File(PATH, PROPS_FILE))) {
             properties.store(fos, null);
         } catch (IOException e) {
-            log.severe("Error occurred when saving properties file: " + e.getMessage());
+            log.severe("Error occurred when saving properties file: " + e.getMessage(), e);
         }
     }
 }

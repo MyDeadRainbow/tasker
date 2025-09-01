@@ -10,11 +10,11 @@ public class Server {
         startScheduler();
         startListener();
 
+        // TaskScheduler.getInstance().close();
     }
 
     static void startScheduler() {
-        TaskScheduler scheduler = new TaskScheduler();
-        new TaskLoader().loadTasks().forEach(scheduler::scheduleTask);
+        TaskLoader.loadTasks().forEach(TaskScheduler::scheduleTask);
     }
 
     static void startListener() {
