@@ -46,8 +46,9 @@ public class Log {
     }
 
     public void info(String msg, Throwable throwable) {
-        logger.log(Level.INFO, msg, throwable);
-        System.out.println(msg + "\n" + getStackTraceString(throwable));
+        logger.log(Level.INFO, msg + "\n" + throwable.getMessage(), throwable);
+        System.out.println(msg + "\n" + throwable.getMessage());
+        throwable.printStackTrace();
     }
 
     public void severe(String msg) {
@@ -56,8 +57,9 @@ public class Log {
     }
 
     public void severe(String msg, Throwable throwable) {
-        logger.log(Level.SEVERE, msg, throwable);
-        System.out.println(msg + "\n" + getStackTraceString(throwable));
+        logger.log(Level.SEVERE, msg + "\n" + throwable.getMessage(), throwable);
+        System.out.println(msg + "\n" + throwable.getMessage());
+        throwable.printStackTrace();
     }
 
     public void warning(String msg) {
@@ -66,8 +68,9 @@ public class Log {
     }
 
     public void warning(String msg, Throwable throwable) {
-        logger.log(Level.WARNING, msg, throwable);
-        System.out.println(msg + "\n" + getStackTraceString(throwable));
+        logger.log(Level.WARNING, msg + "\n" + throwable.getMessage(), throwable);
+        System.out.println(msg + "\n" + throwable.getMessage());
+        throwable.printStackTrace();
     }
 
 }

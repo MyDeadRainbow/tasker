@@ -1,0 +1,4 @@
+com\mdr\task\annotations\Executer.class
+com\mdr\task\annotations\Task.class
+com\mdr\task\Main.class
+com\mdr\task\annotations\ExecuterProcessor.class

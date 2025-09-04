@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -14,10 +15,15 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -131,19 +137,31 @@ public class TaskLoader {
             // Create a URLClassLoader to load the JAR
             classLoader = new URLClassLoader(new URL[] { jarUrl }, ClassLoader.getSystemClassLoader());
 
+            try (JarFile jar = new JarFile(jarFile)) {
+                Enumeration<JarEntry> entries = jar.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = entries.nextElement();
+                    if (entry.getName().startsWith("META-INF")) continue;
+                    if (entry.getName().endsWith(".class")) {
+                        try {
+                            String className = entry.getName().replace("/", ".").replace(".class", "");
+                            classLoader.loadClass(className);
+                        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                            log.severe("Class not found: " + e.getMessage(), e);
+                        }
+                    }
+                }
+            }
             // Configure Reflections to scan the JAR
             Reflections reflections = new Reflections(new ConfigurationBuilder()
                     .setUrls(ClasspathHelper.forClassLoader(classLoader))
                     .setScanners(Scanners.TypesAnnotated));
 
-            // Get all classes annotated with MyAnnotation.class
-            Set<Class<?>> taskSubtypes = reflections.getTypesAnnotatedWith(com.mdr.task.annotations.Task.class);            
-
-            // Process the found classes
-            for (Class<?> clazz : taskSubtypes) {
-                if (!clazz.getAnnotation(Task.class).name().equals(name)) {
-                    continue;
-                }
+            Set<String> taskClassNames = reflections.getStore().get("TypesAnnotated")
+                    .get("com.mdr.task.annotations.Task");
+            // classLoader.loadClass(taskClassNames.iterator().next()).getAnnotation(Task.class);
+            for (String string : taskClassNames) {
+                Class<?> clazz = classLoader.loadClass(string);
                 Task taskAnnotation = clazz.getAnnotation(Task.class);
                 task = Arrays.stream(clazz.getMethods())
                         .filter(method -> method.isAnnotationPresent(Executer.class)
@@ -152,7 +170,39 @@ public class TaskLoader {
                                 startTime, interval))
                         .findFirst()
                         .orElse(null);
+
+                // if (task != null) {
+                //     try {
+                //         loadJson();
+                //         json.getJSONArray("tasks").put(task.toJson());
+                //         saveJson();
+                //     } catch (IOException e) {
+                //         log.severe("Error occurred when saving task to JSON: " + e.getMessage(), e);
+                //     }
+                // }
             }
+            // Configure Reflections to scan the JAR
+            // Reflections reflections = new Reflections(new ConfigurationBuilder()
+            //         .setUrls(ClasspathHelper.forClassLoader(classLoader))
+            //         .setScanners(Scanners.TypesAnnotated));
+
+            // // Get all classes annotated with MyAnnotation.class
+            // Set<Class<?>> taskSubtypes = reflections.getTypesAnnotatedWith(com.mdr.task.annotations.Task.class);
+
+            // // Process the found classes
+            // for (Class<?> clazz : taskSubtypes) {
+            //     if (!clazz.getAnnotation(Task.class).name().equals(name)) {
+            //         continue;
+            //     }
+            //     Task taskAnnotation = clazz.getAnnotation(Task.class);
+            //     task = Arrays.stream(clazz.getMethods())
+            //             .filter(method -> method.isAnnotationPresent(Executer.class)
+            //                     && method.getParameterCount() == 0)
+            //             .map(method -> createTaskRecord(jarPath, clazz, taskAnnotation, method,
+            //                     startTime, interval))
+            //             .findFirst()
+            //             .orElse(null);
+            // }
         } catch (Exception e) {
             log.severe("Error occurred when loading tasks: " + e.getMessage(), e);
         } finally {
@@ -172,21 +222,35 @@ public class TaskLoader {
         URLClassLoader classLoader = null;
         TaskRecord task = null;
         try {
+
             URL jarUrl = jarFile.toURI().toURL();
 
             // Create a URLClassLoader to load the JAR
-            classLoader = new URLClassLoader(new URL[] { jarUrl }, ClassLoader.getSystemClassLoader());
-
+            classLoader = new URLClassLoader(new URL[] { jarUrl });
+            // try (JarFile jar = new JarFile(jarFile)) {
+            //     Enumeration<JarEntry> entries = jar.entries();
+            //     while (entries.hasMoreElements()) {
+            //         JarEntry entry = entries.nextElement();
+            //         if (entry.getName().endsWith(".class")) {
+            //             try {
+            //                 String className = entry.getName().replace("/", ".").replace(".class", "");
+            //                 classLoader.loadClass(className);
+            //             } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            //                 log.severe("Class not found: " + e.getMessage(), e);
+            //             }
+            //         }
+            //     }
+            // }
             // Configure Reflections to scan the JAR
             Reflections reflections = new Reflections(new ConfigurationBuilder()
                     .setUrls(ClasspathHelper.forClassLoader(classLoader))
                     .setScanners(Scanners.TypesAnnotated));
 
-            // Get all classes annotated with MyAnnotation.class
-            Set<Class<?>> taskSubtypes = reflections.getTypesAnnotatedWith(com.mdr.task.annotations.Task.class);
-
-            // Process the found classes
-            for (Class<?> clazz : taskSubtypes) {
+            Set<String> taskClassNames = reflections.getStore().get("TypesAnnotated")
+                    .get("com.mdr.task.annotations.Task");
+            // classLoader.loadClass(taskClassNames.iterator().next()).getAnnotation(Task.class);
+            for (String string : taskClassNames) {
+                Class<?> clazz = classLoader.loadClass(string);
                 Task taskAnnotation = clazz.getAnnotation(Task.class);
                 task = Arrays.stream(clazz.getMethods())
                         .filter(method -> method.isAnnotationPresent(Executer.class)
@@ -206,6 +270,27 @@ public class TaskLoader {
                     }
                 }
             }
+            // Process the found classes
+            // for (Class<?> clazz : taskSubtypes) {
+            // Task taskAnnotation = clazz.getAnnotation(Task.class);
+            // task = Arrays.stream(clazz.getMethods())
+            // .filter(method -> method.isAnnotationPresent(Executer.class)
+            // && method.getParameterCount() == 0)
+            // .map(method -> createTaskRecord(jarPath, clazz, taskAnnotation, method,
+            // overrideStartTime, overrideInterval))
+            // .findFirst()
+            // .orElse(null);
+
+            // if (task != null) {
+            // try {
+            // loadJson();
+            // json.getJSONArray("tasks").put(task.toJson());
+            // saveJson();
+            // } catch (IOException e) {
+            // log.severe("Error occurred when saving task to JSON: " + e.getMessage(), e);
+            // }
+            // }
+            // }
         } catch (Exception e) {
             log.severe("Error occurred when loading tasks: " + e.getMessage(), e);
         } finally {
@@ -334,23 +419,34 @@ public class TaskLoader {
 
     private static TaskRecord createTaskRecord(String jarPath, Class<?> clazz, Task taskAnnotation, Method method,
             String overrideStartTime, Integer overrideInterval) {
-        synchronized (jarPath.intern()) {
-            method.setAccessible(true);
-            return new TaskRecord(
-                    jarPath,
-                    taskAnnotation.name(),
-                    LocalDateTime.parse(overrideStartTime != null
-                            ? overrideStartTime
-                            : taskAnnotation.startTime(),
-                            Props.DATE_FORMAT.get()),
-                    overrideInterval != null ? overrideInterval : taskAnnotation.interval(),
-                    (Runnable) () -> {
-                        try {
-                            method.invoke(clazz.getDeclaredConstructor().newInstance());
-                        } catch (Exception e) {
-                            log.severe("Error occurred when executing task: " + e.getMessage(), e);
-                        }
-                    });
+        // synchronized (jarPath.intern()) {
+        final Object instance;
+        try {
+            instance = clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            log.severe("Error occurred when creating task instance", e);
+            return null;
         }
+        method.setAccessible(true);
+        return new TaskRecord(
+                jarPath,
+                taskAnnotation.name(),
+                LocalDateTime.parse(overrideStartTime != null
+                        ? overrideStartTime
+                        : taskAnnotation.startTime(),
+                        Props.DATE_FORMAT.get()),
+                overrideInterval != null ? overrideInterval : taskAnnotation.interval(),
+                (Runnable) () -> {
+                    try {
+                        // ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                        
+                        // Class<?> clazzz = classLoader.loadClass(clazz.getName());
+                        // Object instance = clazzz.getDeclaredConstructor().newInstance();
+                        method.invoke(instance);
+                    } catch (Exception e) {
+                        log.severe("Error occurred when executing task", e);
+                    }
+                });
+        // }
     }
 }

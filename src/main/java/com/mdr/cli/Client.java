@@ -14,9 +14,9 @@ public class Client {
         args = List.of(
         // "-start"
         // , 
-        "-stop"
+        // "-stop"
         //,
-        // "-add", "G:\\Projects\\tasker\\tasker.jar"//<jarPath> [overrideStartTime] [overrideInterval]"
+        "-add", "G:\\Projects\\email-task\\target\\email-task-1.0-SNAPSHOT-fat.jar"//<jarPath> [overrideStartTime] [overrideInterval]"
         ).toArray(String[]::new);
 
         Map<Actions, String> actions = parseArgs(args);

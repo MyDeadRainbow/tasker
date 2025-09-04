@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <copy file="G:\Projects\tasker\annotations\target/annotations-1.0-SNAPSHOT.jar" tofile="G:\Projects\tasker\annotations/../libs/task-annotations.jar" overwrite="true" />
+  </target>
+</project>
