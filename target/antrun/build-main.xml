@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="maven-antrun-" default="main">
   <target name="main">
-    <copy file="G:\Projects\tasker\target/tasker-1.0-SNAPSHOT.jar" tofile="G:\Projects\tasker/tasker.jar" overwrite="true" />
-    <copy file="G:\Projects\tasker\target/tasker-1.0-SNAPSHOT-fat.jar" tofile="G:\Projects\tasker/server.jar" overwrite="true" />
+    <copy file="G:\Projects\tasker\target/task-runner-1.0-SNAPSHOT.jar" tofile="G:\Projects\tasker/task-runner.jar" overwrite="true" />
+    <copy file="G:\Projects\tasker\target/task-runner-1.0-SNAPSHOT-fat.jar" tofile="G:\Projects\tasker/server.jar" overwrite="true" />
   </target>
 </project>

@@ -34,13 +34,13 @@ public class TaskScheduler {
 
     public static void scheduleTask(TaskRecord task) {
         if (scheduledTasks.containsKey(task)) {
-            log.warning("Task is already scheduled: " + task.name());
+            log.warning("Task is already scheduled: " + task.classPath());
             return;
         }
         LocalDateTime startTime = task.startTime();
         long initialDelay = Duration.between(LocalTime.now(), startTime.toLocalTime()).toSeconds();
         ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> {
-            log.info("Executing task: " + task.name());
+            log.info("Executing task: " + task.classPath());
             // task.task().run();
             executor.execute(task.task());
         }, 0, 10, TimeUnit.SECONDS);//initialDelay, task.interval(), TimeUnit.SECONDS);

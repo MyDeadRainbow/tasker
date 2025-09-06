@@ -6,11 +6,11 @@ import org.json.JSONObject;
 
 import com.mdr.Props;
 
-public record TaskRecord(String jarPath, String name, LocalDateTime startTime, int interval, Runnable task) {
+public record TaskRecord(String jarPath, String classPath, LocalDateTime startTime, int interval, Runnable task) {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("jarPath", jarPath);
-        json.put("name", name);
+        json.put("classPath", classPath);
         json.put("startTime", startTime.format(Props.DATE_FORMAT.get()));
         json.put("interval", interval);
         return json;
@@ -24,9 +24,9 @@ public record TaskRecord(String jarPath, String name, LocalDateTime startTime, i
     //     return new TaskRecord(jarPath, name, startTime, interval, null);
     // }
 
-    public TaskRecord copyWith(String jarPath, String name, LocalDateTime startTime, int interval, Runnable task) {
+    public TaskRecord copyWith(String jarPath, String classPath, LocalDateTime startTime, int interval, Runnable task) {
         return new TaskRecord(jarPath != null ? jarPath : this.jarPath,
-                name != null ? name : this.name,
+                classPath != null ? classPath : this.classPath,
                 startTime != null ? startTime : this.startTime,
                 interval != 0 ? interval : this.interval,
                 task != null ? task : this.task);

@@ -7,27 +7,18 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONML;
 import org.json.JSONObject;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -36,8 +27,8 @@ import org.reflections.util.ConfigurationBuilder;
 
 import com.mdr.Log;
 import com.mdr.Props;
-import com.mdr.task.annotations.Executer;
-import com.mdr.task.annotations.Task;
+import com.mdr.task.framework.Task;
+import com.mdr.task.framework.TaskMetadata;
 
 public class TaskLoader {
     private static final Log log = Log.getLogger(TaskLoader.class);
@@ -93,19 +84,6 @@ public class TaskLoader {
         return json;
     }
 
-    // public static void main(String[] args) throws Exception {
-    // new TaskLoader().loadTasks();
-    // }
-
-    // public static void addTask(String taskPath) {
-    // Thread.ofVirtual().start(() -> {
-    // TaskLoader taskLoader = new TaskLoader();
-    // taskLoader.loadTasks();
-    // taskLoader.json.getJSONArray("tasks").put(taskPath);
-    // taskLoader.saveJson();
-    // });
-    // }
-
     private static void saveJson() {
         Thread.ofVirtual().start(() -> saveJsonSync());
     }
@@ -124,7 +102,7 @@ public class TaskLoader {
 
     public static TaskRecord reflectTaskFromJson(JSONObject taskJson) {
         String jarPath = taskJson.getString("jarPath");
-        String name = taskJson.getString("name");
+        String classPath = taskJson.getString("classPath");
         String startTime = taskJson.getString("startTime");
         int interval = taskJson.getInt("interval");
 
@@ -141,7 +119,71 @@ public class TaskLoader {
                 Enumeration<JarEntry> entries = jar.entries();
                 while (entries.hasMoreElements()) {
                     JarEntry entry = entries.nextElement();
-                    if (entry.getName().startsWith("META-INF")) continue;
+                    if (entry.getName().startsWith("META-INF"))
+                        continue;
+                    if (entry.getName().endsWith(".class")) {
+                        try {
+                            String className = entry.getName().replace("/", ".").replace(".class", "");
+                            classLoader.loadClass(className);
+                        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                            log.severe("Class not found: " + e.getMessage(), e);
+                        }
+                    }
+                }
+            }
+            // Configure Reflections to scan the JAR
+            // Reflections reflections = new Reflections(new ConfigurationBuilder()
+            //         .setUrls(ClasspathHelper.forClassLoader(classLoader))
+            //         .setScanners(Scanners.SubTypes));
+
+            // Set<String> taskClassNames = reflections.getStore().get("SubTypes")
+            //         .get("com.mdr.task.framework.Task");
+            // for (String string : taskClassNames) {
+                Class<?> clazz = classLoader.loadClass(classPath);
+                TaskMetadata taskAnnotation = clazz.getAnnotation(TaskMetadata.class);
+                task = createTaskRecord(jarPath, clazz, taskAnnotation,
+                        startTime, interval);
+            // }
+        } catch (Exception e) {
+            log.severe("Error occurred when loading tasks: " + e.getMessage(), e);
+        } finally {
+            if (classLoader != null) {
+                try {
+                    classLoader.close();
+                } catch (IOException e) {
+                    log.severe("Error occurred when closing class loader: " + e.getMessage(), e);
+                }
+            }
+        }
+        return task;
+    }
+
+    public static List<TaskRecord> addTasksFromJar(String jarPath, String overrideStartTime, Integer overrideInterval) {
+        File jarFile = new File(jarPath);
+
+        //TODO: decide if i want a plugin folder or just store the path in json
+        //Testing is easier when we just store the path in json
+        // try {
+        //     jarFile = Files.copy(jarFile.toPath(), Paths.get(TASK_FOLDER, jarFile.getName()),
+        //             StandardCopyOption.REPLACE_EXISTING).toFile();
+        // } catch (IOException e) {
+        //     log.severe("Error occurred when copying JAR file: " + e.getMessage(), e);
+        //     return null;
+        // }
+        URLClassLoader classLoader = null;
+        List<TaskRecord> tasks = new ArrayList<>();
+        try {
+            URL jarUrl = jarFile.toURI().toURL();
+
+            // Create a URLClassLoader to load the JAR
+            classLoader = new URLClassLoader(new URL[] { jarUrl }, ClassLoader.getSystemClassLoader());
+
+            try (JarFile jar = new JarFile(jarFile)) {
+                Enumeration<JarEntry> entries = jar.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = entries.nextElement();
+                    if (entry.getName().startsWith("META-INF"))
+                        continue;
                     if (entry.getName().endsWith(".class")) {
                         try {
                             String className = entry.getName().replace("/", ".").replace(".class", "");
@@ -155,54 +197,18 @@ public class TaskLoader {
             // Configure Reflections to scan the JAR
             Reflections reflections = new Reflections(new ConfigurationBuilder()
                     .setUrls(ClasspathHelper.forClassLoader(classLoader))
-                    .setScanners(Scanners.TypesAnnotated));
+                    .setScanners(Scanners.SubTypes));
 
-            Set<String> taskClassNames = reflections.getStore().get("TypesAnnotated")
-                    .get("com.mdr.task.annotations.Task");
-            // classLoader.loadClass(taskClassNames.iterator().next()).getAnnotation(Task.class);
+            Set<String> taskClassNames = reflections.getStore().get("SubTypes")
+                    .get("com.mdr.task.framework.Task");
             for (String string : taskClassNames) {
                 Class<?> clazz = classLoader.loadClass(string);
-                Task taskAnnotation = clazz.getAnnotation(Task.class);
-                task = Arrays.stream(clazz.getMethods())
-                        .filter(method -> method.isAnnotationPresent(Executer.class)
-                                && method.getParameterCount() == 0)
-                        .map(method -> createTaskRecord(jarPath, clazz, taskAnnotation, method,
-                                startTime, interval))
-                        .findFirst()
-                        .orElse(null);
+                TaskMetadata taskAnnotation = clazz.getAnnotation(TaskMetadata.class);
+                TaskRecord task = createTaskRecord(jarPath, clazz, taskAnnotation,
+                        overrideStartTime, overrideInterval);
 
-                // if (task != null) {
-                //     try {
-                //         loadJson();
-                //         json.getJSONArray("tasks").put(task.toJson());
-                //         saveJson();
-                //     } catch (IOException e) {
-                //         log.severe("Error occurred when saving task to JSON: " + e.getMessage(), e);
-                //     }
-                // }
+                
             }
-            // Configure Reflections to scan the JAR
-            // Reflections reflections = new Reflections(new ConfigurationBuilder()
-            //         .setUrls(ClasspathHelper.forClassLoader(classLoader))
-            //         .setScanners(Scanners.TypesAnnotated));
-
-            // // Get all classes annotated with MyAnnotation.class
-            // Set<Class<?>> taskSubtypes = reflections.getTypesAnnotatedWith(com.mdr.task.annotations.Task.class);
-
-            // // Process the found classes
-            // for (Class<?> clazz : taskSubtypes) {
-            //     if (!clazz.getAnnotation(Task.class).name().equals(name)) {
-            //         continue;
-            //     }
-            //     Task taskAnnotation = clazz.getAnnotation(Task.class);
-            //     task = Arrays.stream(clazz.getMethods())
-            //             .filter(method -> method.isAnnotationPresent(Executer.class)
-            //                     && method.getParameterCount() == 0)
-            //             .map(method -> createTaskRecord(jarPath, clazz, taskAnnotation, method,
-            //                     startTime, interval))
-            //             .findFirst()
-            //             .orElse(null);
-            // }
         } catch (Exception e) {
             log.severe("Error occurred when loading tasks: " + e.getMessage(), e);
         } finally {
@@ -214,223 +220,32 @@ public class TaskLoader {
                 }
             }
         }
-        return task;
-    }
-
-    public static TaskRecord addTasksFromJar(String jarPath, String overrideStartTime, Integer overrideInterval) {
-        File jarFile = new File(jarPath);
-        URLClassLoader classLoader = null;
-        TaskRecord task = null;
         try {
-
-            URL jarUrl = jarFile.toURI().toURL();
-
-            // Create a URLClassLoader to load the JAR
-            classLoader = new URLClassLoader(new URL[] { jarUrl });
-            // try (JarFile jar = new JarFile(jarFile)) {
-            //     Enumeration<JarEntry> entries = jar.entries();
-            //     while (entries.hasMoreElements()) {
-            //         JarEntry entry = entries.nextElement();
-            //         if (entry.getName().endsWith(".class")) {
-            //             try {
-            //                 String className = entry.getName().replace("/", ".").replace(".class", "");
-            //                 classLoader.loadClass(className);
-            //             } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            //                 log.severe("Class not found: " + e.getMessage(), e);
-            //             }
-            //         }
-            //     }
-            // }
-            // Configure Reflections to scan the JAR
-            Reflections reflections = new Reflections(new ConfigurationBuilder()
-                    .setUrls(ClasspathHelper.forClassLoader(classLoader))
-                    .setScanners(Scanners.TypesAnnotated));
-
-            Set<String> taskClassNames = reflections.getStore().get("TypesAnnotated")
-                    .get("com.mdr.task.annotations.Task");
-            // classLoader.loadClass(taskClassNames.iterator().next()).getAnnotation(Task.class);
-            for (String string : taskClassNames) {
-                Class<?> clazz = classLoader.loadClass(string);
-                Task taskAnnotation = clazz.getAnnotation(Task.class);
-                task = Arrays.stream(clazz.getMethods())
-                        .filter(method -> method.isAnnotationPresent(Executer.class)
-                                && method.getParameterCount() == 0)
-                        .map(method -> createTaskRecord(jarPath, clazz, taskAnnotation, method,
-                                overrideStartTime, overrideInterval))
-                        .findFirst()
-                        .orElse(null);
-
-                if (task != null) {
-                    try {
-                        loadJson();
-                        json.getJSONArray("tasks").put(task.toJson());
-                        saveJson();
-                    } catch (IOException e) {
-                        log.severe("Error occurred when saving task to JSON: " + e.getMessage(), e);
-                    }
-                }
+            loadJson();
+            for (TaskRecord task : tasks) {
+                json.getJSONArray("tasks").put(task.toJson());
             }
-            // Process the found classes
-            // for (Class<?> clazz : taskSubtypes) {
-            // Task taskAnnotation = clazz.getAnnotation(Task.class);
-            // task = Arrays.stream(clazz.getMethods())
-            // .filter(method -> method.isAnnotationPresent(Executer.class)
-            // && method.getParameterCount() == 0)
-            // .map(method -> createTaskRecord(jarPath, clazz, taskAnnotation, method,
-            // overrideStartTime, overrideInterval))
-            // .findFirst()
-            // .orElse(null);
-
-            // if (task != null) {
-            // try {
-            // loadJson();
-            // json.getJSONArray("tasks").put(task.toJson());
-            // saveJson();
-            // } catch (IOException e) {
-            // log.severe("Error occurred when saving task to JSON: " + e.getMessage(), e);
-            // }
-            // }
-            // }
-        } catch (Exception e) {
-            log.severe("Error occurred when loading tasks: " + e.getMessage(), e);
-        } finally {
-            if (classLoader != null) {
-                try {
-                    classLoader.close();
-                } catch (IOException e) {
-                    log.severe("Error occurred when closing class loader: " + e.getMessage(), e);
-                }
-            }
+            saveJson();
+        } catch (IOException e) {
+            log.severe("Error occurred when saving task to JSON: " + e.getMessage(), e);
         }
-        return task;
+
+        return tasks;
     }
 
-    // List<TaskRecord> loadTasksFromJson() {
-    // List<TaskRecord> taskRecords = new ArrayList<>();
-    // BufferedReader bufferedReader = null;
-    // try {
-    // File file = new File(Paths.get(TASK_FOLDER, JSON).toUri());
-    // if (!file.exists()) {
-    // file.createNewFile();
-    // }
-    // InputStreamReader reader = new InputStreamReader(
-    // new FileInputStream(file));
-
-    // bufferedReader = new BufferedReader(reader);
-    // String jsonString = bufferedReader.lines().reduce("", (acc, line) -> {
-    // if (line.trim().length() > 0) {
-    // acc += line.trim();
-    // }
-    // return acc;
-    // });
-    // if (jsonString.isEmpty()) {
-    // jsonString = "{\"tasks\":[]}";
-    // json = new JSONObject(jsonString);
-    // saveJson();
-    // } else {
-    // json = new JSONObject(jsonString);
-    // }
-
-    // JSONArray tasksArray = json.getJSONArray("tasks");
-    // for (int i = 0; i < tasksArray.length(); i++) {
-    // TaskRecord task = TaskRecord.fromJson(tasksArray.getJSONObject(i));
-    // taskRecords.add(task);
-    // }
-    // } catch (Exception e) {
-    // log.severe("Error occurred when loading tasks from JSON: " + e.getMessage());
-    // } finally {
-    // if (bufferedReader != null) {
-    // try {
-    // bufferedReader.close();
-    // } catch (Exception e) {
-    // log.severe("Error occurred when closing BufferedReader: " + e.getMessage());
-    // }
-    // }
-    // }
-    // return taskRecords;
-    // }
-
-    // private List<String> loadTaskPathsFromFolder() {
-    // List<String> taskPaths = new ArrayList<>();
-    // File folder = new File(TASK_FOLDER);
-    // File[] files = folder.listFiles((_, name) -> name.endsWith(".jar"));
-    // for (File file : files) {
-    // taskPaths.add(file.getAbsolutePath());
-    // }
-    // return taskPaths;
-    // }
-
-    // public List<TaskRecord> loadTasks() {
-    // List<TaskRecord> taskRecords = new ArrayList<>();
-    // taskRecords.addAll(loadTasksFromJson());
-    // // taskRecords.addAll(loadTaskPathsFromFolder());
-
-    // List<TaskRecord> tasks = new ArrayList<>();
-    // for (TaskRecord record : taskRecords) {
-
-    // // 1. Obtain the JAR file path
-    // File jarFile = new File(record.jarPath());
-    // URLClassLoader classLoader = null;
-    // try {
-    // URL jarUrl = jarFile.toURI().toURL();
-
-    // // Create a URLClassLoader to load the JAR
-    // classLoader = new URLClassLoader(new URL[] { jarUrl },
-    // ClassLoader.getSystemClassLoader());
-
-    // // Configure Reflections to scan the JAR
-    // Reflections reflections = new Reflections(new ConfigurationBuilder()
-    // .setUrls(ClasspathHelper.forClassLoader(classLoader))
-    // .setScanners(Scanners.TypesAnnotated));
-
-    // // Get all classes annotated with MyAnnotation.class
-    // Set<Class<?>> taskSubtypes =
-    // reflections.getTypesAnnotatedWith(com.mdr.task.annotations.Task.class);
-
-    // // Process the found classes
-    // for (Class<?> clazz : taskSubtypes) {
-    // Task taskAnnotation = clazz.getAnnotation(Task.class);
-    // TaskRecord task = Arrays.stream(clazz.getMethods())
-    // .filter(method -> method.isAnnotationPresent(Executer.class)
-    // && method.getParameterCount() == 0)
-    // .map(method -> createTaskRecord(record.jarPath(), clazz, taskAnnotation,
-    // method))
-    // .findFirst()
-    // .orElse(null);
-
-    // if (task != null) {
-    // tasks.add(task);
-    // }
-    // }
-    // } catch (Exception e) {
-    // log.severe("Error occurred when loading tasks: " + e.getMessage());
-    // } finally {
-    // if (classLoader != null) {
-    // try {
-    // classLoader.close();
-    // } catch (IOException e) {
-    // log.severe("Error occurred when closing class loader: " + e.getMessage());
-    // }
-    // }
-    // }
-    // }
-    // return tasks;
-    // }
-
-    private static TaskRecord createTaskRecord(String jarPath, Class<?> clazz, Task taskAnnotation, Method method,
+    private static TaskRecord createTaskRecord(String jarPath, Class<?> clazz, TaskMetadata taskAnnotation,
             String overrideStartTime, Integer overrideInterval) {
-        // synchronized (jarPath.intern()) {
-        final Object instance;
+
+        final Task instance;
         try {
-            instance = clazz.getDeclaredConstructor().newInstance();
+            instance = (Task) clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             log.severe("Error occurred when creating task instance", e);
             return null;
         }
-        method.setAccessible(true);
         return new TaskRecord(
                 jarPath,
-                taskAnnotation.name(),
+                instance.getClass().getName(),
                 LocalDateTime.parse(overrideStartTime != null
                         ? overrideStartTime
                         : taskAnnotation.startTime(),
@@ -438,15 +253,10 @@ public class TaskLoader {
                 overrideInterval != null ? overrideInterval : taskAnnotation.interval(),
                 (Runnable) () -> {
                     try {
-                        // ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                        
-                        // Class<?> clazzz = classLoader.loadClass(clazz.getName());
-                        // Object instance = clazzz.getDeclaredConstructor().newInstance();
-                        method.invoke(instance);
+                        instance.execute();
                     } catch (Exception e) {
                         log.severe("Error occurred when executing task", e);
                     }
                 });
-        // }
     }
 }

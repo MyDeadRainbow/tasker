@@ -8,8 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 import com.mdr.Log;
 import com.mdr.Props;
@@ -120,10 +120,12 @@ public class CommandListener {
                 overrideInterval = null;
             }
             // Add the task to the TaskLoader
-            TaskRecord task = TaskLoader.addTasksFromJar(jarPath, overrideStartTime, overrideInterval);
-            if (task != null) {
-                TaskScheduler.scheduleTask(task);
-                log.info("Task added successfully: " + task);
+            List<TaskRecord> tasks = TaskLoader.addTasksFromJar(jarPath, overrideStartTime, overrideInterval);
+            if (tasks != null) {
+                tasks.forEach(task -> {
+                    TaskScheduler.scheduleTask(task);
+                    log.info("Task added successfully: " + task);
+                });
             } else {
                 log.warning("Failed to add task from JAR: " + jarPath);
             }

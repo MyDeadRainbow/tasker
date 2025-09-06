@@ -13,6 +13,8 @@ G:\Projects\tasker\src\main\java\com\mdr\Server.java
 G:\Projects\tasker\src\main\java\com\mdr\task\annotations\Executer.java
 G:\Projects\tasker\src\main\java\com\mdr\task\annotations\ExecuterProcessor.java
 G:\Projects\tasker\src\main\java\com\mdr\task\annotations\Task.java
+G:\Projects\tasker\src\main\java\com\mdr\task\framework\Task.java
+G:\Projects\tasker\src\main\java\com\mdr\task\framework\TaskMetadata.java
 G:\Projects\tasker\src\main\java\com\mdr\task\TaskLoader.java
 G:\Projects\tasker\src\main\java\com\mdr\task\TaskRecord.java
 G:\Projects\tasker\src\main\java\com\mdr\task\TestTask.java

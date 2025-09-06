@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mdr</groupId>
-    <artifactId>tasker</artifactId>
+    <artifactId>task-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>com.mdr</groupId>
-            <artifactId>tasker</artifactId>
+            <artifactId>task-runner</artifactId>
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}\libs\task-annotations.jar</systemPath>
@@ -74,7 +74,7 @@
                             <shadedClassifierName>fat</shadedClassifierName>
                             <!-- <artifactSet>
                                 <includes>
-                                    <include>com.mdr:tasker</include>
+                                    <include>com.mdr:task-runner</include>
                                 </includes>
                             </artifactSet> -->
                             <filters>
@@ -153,7 +153,7 @@
                         <phase>package</phase>
                         <configuration>
                             <target>
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.basedir}/tasker.jar" overwrite="true" />
+                                <copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.basedir}/task-runner.jar" overwrite="true" />
                                 <copy file="${project.build.directory}/${project.build.finalName}-fat.jar" tofile="${project.basedir}/server.jar" overwrite="true" />
                             </target>
                         </configuration>

@@ -3,13 +3,13 @@ package com.mdr.task;
 import java.time.LocalDateTime;
 
 import com.mdr.Props;
-import com.mdr.task.annotations.Executer;
-import com.mdr.task.annotations.Task;
+import com.mdr.task.framework.Task;
+import com.mdr.task.framework.TaskMetadata;
 
-@Task(name = "Test Task", startTime = "2023-10-01 10:00:00", interval = 10)
-public class TestTask {
+@TaskMetadata(name = "Test Task", startTime = "2023-10-01 10:00:00", interval = 10)
+public class TestTask implements Task {
 
-    @Executer
+    @Override
     public void execute() {
         System.out.println("Executing Test Task at "
                 + LocalDateTime.now().format(Props.DATE_FORMAT.get()));
@@ -17,7 +17,7 @@ public class TestTask {
 
     @Override
     public String toString() {
-        Task task = this.getClass().getAnnotation(Task.class);
+        TaskMetadata task = this.getClass().getAnnotation(TaskMetadata.class);
         if (task != null) {
             return "TestTask{" +
                     "name='" + task.name() + '\'' +

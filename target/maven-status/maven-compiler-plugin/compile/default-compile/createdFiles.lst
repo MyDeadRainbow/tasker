@@ -1,9 +1,11 @@
 com\mdr\Gen.class
 com\mdr\task\TaskRecord.class
+com\mdr\task\framework\TaskMetadata.class
 com\mdr\cli\parser\annotations\Argument.class
 com\mdr\task\annotations\Executer.class
 com\mdr\cli\parser\Actions.class
 com\mdr\Log.class
+com\mdr\task\framework\Task.class
 com\mdr\task\annotations\Task.class
 com\mdr\Props.class
 com\mdr\TaskScheduler.class

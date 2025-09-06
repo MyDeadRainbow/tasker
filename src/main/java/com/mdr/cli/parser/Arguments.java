@@ -15,7 +15,7 @@ import javax.lang.model.type.NullType;
 import com.mdr.Props;
 import com.mdr.cli.CommandListener;
 
-public enum Actions implements Argument {
+public enum Arguments implements Argument {
     START_SERVER(new String[] { "-start" }, 1, ActionPriority.EXCLUSIVE, value -> {
         ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
         processBuilder.directory(Paths.get("").toAbsolutePath().toFile());
@@ -37,13 +37,13 @@ public enum Actions implements Argument {
     }),
     ADD(new String[] { "-add", "-a" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        Actions.sendCommand(CommandListener.Commands.ADD + " " + value);
+        Arguments.sendCommand(CommandListener.Commands.ADD + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing add command: " + errorMessage);
     }),
     REMOVE(new String[] { "-remove", "-rm" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        Actions.sendCommand(CommandListener.Commands.REMOVE + " " + value);
+        Arguments.sendCommand(CommandListener.Commands.REMOVE + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing remove command: " + errorMessage);
     }),
@@ -64,7 +64,7 @@ public enum Actions implements Argument {
     private final ActionPriority priority;
     private final int parts;
 
-    Actions(String[] identifiers, int parts, ActionPriority priority, Consumer<String> process,
+    Arguments(String[] identifiers, int parts, ActionPriority priority, Consumer<String> process,
             Consumer<String> onError) {
         this.identifiers = identifiers;
         this.parts = parts;
@@ -101,8 +101,8 @@ public enum Actions implements Argument {
     // return Arrays.equals(identifiers, other.identifiers);
     // }
 
-    public static Actions getByPrefix(String prefix) {
-        for (Actions action : Actions.values()) {
+    public static Arguments getByPrefix(String prefix) {
+        for (Arguments action : Arguments.values()) {
             if (Arrays.stream(action.getIdentifiers())
                     .anyMatch(identifier -> identifier.equals(prefix))) {
                 return action;

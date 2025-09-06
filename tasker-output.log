@@ -5878,3 +5878,34 @@ Sept 04, 2025 8:25:02 PM com.mdr.Log info
 INFO: Executing task: Email Processor
 Sept 04, 2025 8:25:02 PM com.mdr.Log info
 INFO: Executing task: Test Task
+Sept 06, 2025 2:24:09 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Sept 06, 2025 2:24:09 PM com.mdr.Log info
+INFO: App listening on port: 61373
+Sept 06, 2025 2:24:19 PM com.mdr.Log info
+INFO: Executing task: Test Task
+Sept 06, 2025 2:42:13 PM com.mdr.Log severe
+SEVERE: Error occurred when loading tasks from JSON: JSONObject["classPath"] not found.
+JSONObject["classPath"] not found.
+org.json.JSONException: JSONObject["classPath"] not found.
+	at org.json.JSONObject.get(JSONObject.java:635)
+	at org.json.JSONObject.getString(JSONObject.java:922)
+	at com.mdr.task.TaskLoader.reflectTaskFromJson(TaskLoader.java:105)
+	at com.mdr.task.TaskLoader.lambda$0(TaskLoader.java:47)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at com.mdr.task.TaskLoader.loadTasks(TaskLoader.java:45)
+	at com.mdr.Server.startScheduler(Server.java:17)
+	at com.mdr.Server.main(Server.java:10)
+
+Sept 06, 2025 2:42:13 PM com.mdr.Log info
+INFO: App listening on port: 63428
+Sept 06, 2025 2:42:53 PM com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+Sept 06, 2025 2:42:53 PM com.mdr.Log info
+INFO: App listening on port: 54361
+Sept 06, 2025 2:43:03 PM com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+Sept 06, 2025 2:43:13 PM com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+Sept 06, 2025 2:43:23 PM com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
