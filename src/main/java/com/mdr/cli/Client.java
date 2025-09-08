@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.mdr.cli.parser.ActionPriority;
-import com.mdr.cli.parser.Arguments;
+import com.mdr.cli.parser.ClientArguments;
 
 public class Client {
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class Client {
         "-add", "G:\\Projects\\email-task\\target\\email-task-1.0-SNAPSHOT-fat.jar"//<jarPath> [overrideStartTime] [overrideInterval]"
         ).toArray(String[]::new);
 
-        Map<Arguments, String> actions = parseArgs(args);
+        Map<ClientArguments, String> actions = parseArgs(args);
         actions.forEach((action, value) -> {
             System.out.println("Action: " + action.name());
             action.process(value);
@@ -27,8 +27,8 @@ public class Client {
         
     }
 
-    private static Map<Arguments, String> parseArgs(String[] args) {
-        Map<Arguments, String> actions = new TreeMap<>((a, b) -> {
+    private static Map<ClientArguments, String> parseArgs(String[] args) {
+        Map<ClientArguments, String> actions = new TreeMap<>((a, b) -> {
             if (a.getPriority() == ActionPriority.EXCLUSIVE || b.getPriority() == ActionPriority.EXCLUSIVE) {
                 if (a.getPriority() == ActionPriority.EXCLUSIVE && b.getPriority() == ActionPriority.EXCLUSIVE) {
                     return 0;
@@ -44,7 +44,7 @@ public class Client {
             return a.getPriority().compareTo(b.getPriority());
         });
         for (int i = 0; i < args.length;) {
-            Arguments action = Arguments.getByPrefix(args[i]);
+            ClientArguments action = ClientArguments.getByPrefix(args[i]);
             if (action != null) {
                 StringBuilder value = new StringBuilder();
                 for (int j = 1; j < action.getParts(); j++) {
@@ -66,7 +66,7 @@ public class Client {
             }
         }
         if (actions.isEmpty()) {
-            actions.put(Arguments.EMPTY, null);
+            actions.put(ClientArguments.EMPTY, null);
         }
         return actions;
     }

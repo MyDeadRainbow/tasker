@@ -18,6 +18,6 @@ public class Server {
     }
 
     static void startListener() {
-        new CommandListener().start();
+        new ServerArgumentListener().start();
     }
 }

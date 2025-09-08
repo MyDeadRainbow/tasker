@@ -6,16 +6,11 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Properties;
 import java.util.function.Consumer;
-import java.util.function.Function;
-
-import javax.lang.model.type.NullType;
 
 import com.mdr.Props;
-import com.mdr.cli.CommandListener;
 
-public enum Arguments implements Argument {
+public enum ClientArguments implements Argument {
     START_SERVER(new String[] { "-start" }, 1, ActionPriority.EXCLUSIVE, value -> {
         ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", Props.SERVER_PATH.get());
         processBuilder.directory(Paths.get("").toAbsolutePath().toFile());
@@ -31,19 +26,19 @@ public enum Arguments implements Argument {
         System.out.println("Error occurred while processing start command: " + errorMessage);
     }),
     STOP_SERVER(new String[] { "-stop" }, 1, ActionPriority.EXCLUSIVE, value -> {
-        sendCommand(CommandListener.Commands.STOP + " " + value);
+        sendCommand(ServerArguments.STOP + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing stop command: " + errorMessage);
     }),
     ADD(new String[] { "-add", "-a" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        Arguments.sendCommand(CommandListener.Commands.ADD + " " + value);
+        ClientArguments.sendCommand(ServerArguments.ADD + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing add command: " + errorMessage);
     }),
     REMOVE(new String[] { "-remove", "-rm" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        Arguments.sendCommand(CommandListener.Commands.REMOVE + " " + value);
+        ClientArguments.sendCommand(ServerArguments.REMOVE + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing remove command: " + errorMessage);
     }),
@@ -64,7 +59,7 @@ public enum Arguments implements Argument {
     private final ActionPriority priority;
     private final int parts;
 
-    Arguments(String[] identifiers, int parts, ActionPriority priority, Consumer<String> process,
+    ClientArguments(String[] identifiers, int parts, ActionPriority priority, Consumer<String> process,
             Consumer<String> onError) {
         this.identifiers = identifiers;
         this.parts = parts;
@@ -90,7 +85,17 @@ public enum Arguments implements Argument {
 
     @Override
     public void process(String value) {
-        process.accept(value);
+        try {
+            process.accept(value);
+        } catch (Throwable e) {
+            onError(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void onError(String errorMessage, Throwable throwable) {
+        onError.accept(errorMessage);
+        throwable.printStackTrace();
     }
 
     // @Override
@@ -101,8 +106,8 @@ public enum Arguments implements Argument {
     // return Arrays.equals(identifiers, other.identifiers);
     // }
 
-    public static Arguments getByPrefix(String prefix) {
-        for (Arguments action : Arguments.values()) {
+    public static ClientArguments getByPrefix(String prefix) {
+        for (ClientArguments action : ClientArguments.values()) {
             if (Arrays.stream(action.getIdentifiers())
                     .anyMatch(identifier -> identifier.equals(prefix))) {
                 return action;
@@ -121,26 +126,5 @@ public enum Arguments implements Argument {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-}
-
-enum ActionProperties {
-    START_SERVER(),
-    STOP_SERVER(),
-    ADD(),
-    REMOVE();
-
-    private final Properties properties;
-
-    ActionProperties() {
-        properties = new Properties();
-    }
-
-    public String get() {
-        return properties.getProperty(this.name());
-    }
-
-    public void set(String value) {
-        properties.setProperty(this.name(), value);
     }
 }
