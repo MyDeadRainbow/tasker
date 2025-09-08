@@ -1,6 +1,6 @@
 package com.mdr;
 
-import com.mdr.cli.CommandListener;
+import com.mdr.cli.parser.ServerArguments;
 import com.mdr.task.TaskLoader;
 
 public class Server {
@@ -18,6 +18,6 @@ public class Server {
     }
 
     static void startListener() {
-        new ServerArgumentListener().start();
+        ServerArguments.listener().start();
     }
 }

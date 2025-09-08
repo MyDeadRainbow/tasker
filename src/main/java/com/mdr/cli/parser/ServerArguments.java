@@ -106,6 +106,10 @@ public enum ServerArguments implements Argument {
         this.onError = onError;
     }
 
+    public String getFirstIdentifier() {
+        return identifiers.length > 0 ? identifiers[0] : "";
+    }
+
     @Override
     public String[] getIdentifiers() {
         return identifiers;

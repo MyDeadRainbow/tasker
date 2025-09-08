@@ -26,19 +26,19 @@ public enum ClientArguments implements Argument {
         System.out.println("Error occurred while processing start command: " + errorMessage);
     }),
     STOP_SERVER(new String[] { "-stop" }, 1, ActionPriority.EXCLUSIVE, value -> {
-        sendCommand(ServerArguments.STOP + " " + value);
+        sendCommand(ServerArguments.STOP.getFirstIdentifier() + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing stop command: " + errorMessage);
     }),
     ADD(new String[] { "-add", "-a" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        ClientArguments.sendCommand(ServerArguments.ADD + " " + value);
+        ClientArguments.sendCommand(ServerArguments.ADD.getFirstIdentifier() + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing add command: " + errorMessage);
     }),
     REMOVE(new String[] { "-remove", "-rm" }, 2, ActionPriority.LOW, value -> {
         System.out.println(value);
-        ClientArguments.sendCommand(ServerArguments.REMOVE + " " + value);
+        ClientArguments.sendCommand(ServerArguments.REMOVE.getFirstIdentifier() + " " + value);
     }, (errorMessage) -> {
         System.out.println("Error occurred while processing remove command: " + errorMessage);
     }),
