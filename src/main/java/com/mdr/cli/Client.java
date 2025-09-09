@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.mdr.Log;
 import com.mdr.cli.parser.ActionPriority;
 import com.mdr.cli.parser.ClientArguments;
 
 public class Client {
     public static void main(String[] args) {
+        Log.setup();
         args = List.of(
         // "-start"
         // , 

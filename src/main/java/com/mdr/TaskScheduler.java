@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import com.mdr.task.TaskRecord;
 
 public class TaskScheduler {
-    private static final Log log = Log.getLogger(TaskScheduler.class);
+    private static final Logger log = Logger.getLogger(TaskScheduler.class.getName());
 
     private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
@@ -43,7 +43,7 @@ public class TaskScheduler {
             log.info("Executing task: " + task.classPath());
             // task.task().run();
             executor.execute(task.task());
-        }, 0, 10, TimeUnit.SECONDS);//initialDelay, task.interval(), TimeUnit.SECONDS);
+        }, initialDelay, task.interval(), TimeUnit.SECONDS);
         scheduledTasks.put(task, future);
 
     }

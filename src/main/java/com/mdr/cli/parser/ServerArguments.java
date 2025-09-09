@@ -10,8 +10,9 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.mdr.Log;
 import com.mdr.Props;
 import com.mdr.TaskScheduler;
 import com.mdr.task.TaskLoader;
@@ -26,29 +27,31 @@ public enum ServerArguments implements Argument {
             clientOutput.write("Stopping...");
             clientOutput.newLine();
             clientOutput.flush();
+            
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Error occurred when stopping: " + e.getMessage(), e);
+        } finally {
             if (ServerArgumentListener.clientSocket != null && !ServerArgumentListener.clientSocket.isClosed()) {
                 try {
                     ServerArgumentListener.clientSocket.close();
                 } catch (IOException e) {
-                    log.severe("Error occurred when closing client socket: " + e.getMessage(), e);
+                    log.log(Level.SEVERE, "Error occurred when closing client socket: " + e.getMessage(), e);
                 }
             }
             if (ServerArgumentListener.serverSocket != null && !ServerArgumentListener.serverSocket.isClosed()) {
                 try {
                     ServerArgumentListener.serverSocket.close();
                 } catch (IOException e) {
-                    log.severe("Error occurred when closing server socket: " + e.getMessage(), e);
+                    log.log(Level.SEVERE, "Error occurred when closing server socket: " + e.getMessage(), e);
                 }
             }
-        } catch (IOException e) {
-            log.severe("Error occurred when stopping: " + e.getMessage(), e);
-        } finally {
             TaskScheduler.close();
         }
 
     }, (errorMessage, log, throwable) -> {
-        log.severe("Error occurred while processing stop command: " + errorMessage, throwable);
+        log.log(Level.SEVERE, "Error occurred while processing stop command: " + errorMessage, throwable);
     }),
+    //TODO: This needs to accept task names or class paths per start time and interval overrides. Current implementation will use the same values for all the tasks in the jar
     ADD(new String[] { "-add" }, 3, ActionPriority.EXCLUSIVE, (value, log) -> {
         String[] args = value.split(" ");
         String jarPath = args[1];
@@ -75,30 +78,30 @@ public enum ServerArguments implements Argument {
             log.warning("Failed to add task from JAR: " + jarPath);
         }
     }, (errorMessage, log, throwable) -> {
-        log.severe("Error occurred while processing add command: " + errorMessage, throwable);
+        log.log(Level.SEVERE, "Error occurred while processing add command: " + errorMessage, throwable);
     }),
     REMOVE(new String[] { "-remove" }, 1, ActionPriority.EXCLUSIVE, (value, log) -> {
         String[] args = value.split(" ");
         String jarPath = args[1];
         TaskScheduler.removeTask(jarPath);
     }, (errorMessage, log, throwable) -> {
-        log.severe("Error occurred while processing remove command: " + errorMessage, throwable);
+        log.log(Level.SEVERE, "Error occurred while processing remove command: " + errorMessage, throwable);
     }),
     NONE(new String[] {}, 1, ActionPriority.LOW, (value, log) -> {
         log.info("No command provided. Use -help for assistance.");
     }, (errorMessage, log, throwable) -> {
-        log.severe("Error occurred while processing empty command: " + errorMessage, throwable);
+        log.log(Level.SEVERE, "Error occurred while processing empty command: " + errorMessage, throwable);
     });
 
-    private static final Log log = Log.getLogger(ServerArguments.class);
+    private static final Logger log = Logger.getLogger(ServerArguments.class.getName());
     private final String[] identifiers;
     private final int parts;
     private final ActionPriority priority;
-    public final BiConsumer<String, Log> process;
-    public final TriConsumer<String, Log, Throwable> onError;
+    public final BiConsumer<String, Logger> process;
+    public final TriConsumer<String, Logger, Throwable> onError;
 
-    ServerArguments(String[] identifiers, int parts, ActionPriority priority, BiConsumer<String, Log> process,
-            TriConsumer<String, Log, Throwable> onError) {
+    ServerArguments(String[] identifiers, int parts, ActionPriority priority, BiConsumer<String, Logger> process,
+            TriConsumer<String, Logger, Throwable> onError) {
         this.identifiers = identifiers;
         this.parts = parts;
         this.priority = priority;
@@ -161,7 +164,7 @@ public enum ServerArguments implements Argument {
     public static enum ServerArgumentListener {
         INSTANCE;
 
-        private static final Log log = Log.getLogger(ServerArgumentListener.class);
+        private static final Logger log = Logger.getLogger(ServerArgumentListener.class.getName());
         private static ServerSocket serverSocket;
         private static Socket clientSocket;
 
@@ -188,20 +191,21 @@ public enum ServerArguments implements Argument {
                         arg.process(input);
                     } while (clientSocket != null && !clientSocket.isClosed() && !serverSocket.isClosed());
                 } catch (IOException e) {
-                    log.severe("Error occurred: " + e.getMessage(), e);
+                    
+                    log.log(Level.SEVERE, "Error occurred: " + e.getMessage(), e);
                 } finally {
                     if (serverSocket != null && !serverSocket.isClosed()) {
                         try {
                             serverSocket.close();
                         } catch (IOException e) {
-                            log.severe("Error occurred when closing server socket: " + e.getMessage(), e);
+                            log.log(Level.SEVERE, "Error occurred when closing server socket: " + e.getMessage(), e);
                         }
                     }
                     if (clientSocket != null && !clientSocket.isClosed()) {
                         try {
                             clientSocket.close();
                         } catch (IOException e) {
-                            log.severe("Error occurred when closing client socket: " + e.getMessage(), e);
+                            log.log(Level.SEVERE, "Error occurred when closing client socket: " + e.getMessage(), e);
                         }
                     }
                 }

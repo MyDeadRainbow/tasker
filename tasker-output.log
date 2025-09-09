@@ -5909,3 +5909,17 @@ Sept 06, 2025 2:43:13 PM com.mdr.Log info
 INFO: Executing task: com.mdr.task.TestTask
 Sept 06, 2025 2:43:23 PM com.mdr.Log info
 INFO: Executing task: com.mdr.task.TestTask
+[2025-09-09 20:51:37] com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+[2025-09-09 20:51:37] com.mdr.Log info
+INFO: App listening on port: 64207
+[2025-09-09 20:51:47] com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+[2025-09-09 20:51:57] com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+[2025-09-09 20:52:07] com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+[2025-09-09 20:52:17] com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask
+[2025-09-09 20:52:27] com.mdr.Log info
+INFO: Executing task: com.mdr.task.TestTask

@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,13 +27,12 @@ import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import com.mdr.Log;
 import com.mdr.Props;
 import com.mdr.task.framework.Task;
 import com.mdr.task.framework.TaskMetadata;
 
 public class TaskLoader {
-    private static final Log log = Log.getLogger(TaskLoader.class);
+    private static final Logger log = Logger.getLogger(TaskLoader.class.getName());
 
     private static final String JSON = "tasks.json";
     private static final String TASK_FOLDER = "tasks";
@@ -48,9 +49,9 @@ public class TaskLoader {
                 taskRecords.add(taskRecord);
             });
         } catch (JSONException e) {
-            log.severe("Error occurred when loading tasks from JSON: " + e.getMessage(), e);
+            log.log(Level.SEVERE, "Error occurred when loading tasks from JSON: " + e.getMessage(), e);
         } catch (IOException e) {
-            log.severe("Error occurred when loading tasks from JSON: " + e.getMessage(), e);
+            log.log(Level.SEVERE, "Error occurred when loading tasks from JSON: " + e.getMessage(), e);
         }
         return taskRecords;
     }
@@ -95,7 +96,7 @@ public class TaskLoader {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(TASK_FOLDER, JSON).toFile()))) {
             writer.write(json.toString());
         } catch (IOException e) {
-            log.severe("Error occurred when saving JSON file: " + e.getMessage(), e);
+            log.log(Level.SEVERE, "Error occurred when saving JSON file: " + e.getMessage(), e);
         }
 
     }
@@ -126,7 +127,7 @@ public class TaskLoader {
                             String className = entry.getName().replace("/", ".").replace(".class", "");
                             classLoader.loadClass(className);
                         } catch (ClassNotFoundException | NoClassDefFoundError e) {
-                            log.severe("Class not found: " + e.getMessage(), e);
+                            log.log(Level.SEVERE, "Class not found: " + e.getMessage(), e);
                         }
                     }
                 }
@@ -145,13 +146,13 @@ public class TaskLoader {
                         startTime, interval);
             // }
         } catch (Exception e) {
-            log.severe("Error occurred when loading tasks: " + e.getMessage(), e);
+            log.log(Level.SEVERE, "Error occurred when loading tasks: " + e.getMessage(), e);
         } finally {
             if (classLoader != null) {
                 try {
                     classLoader.close();
                 } catch (IOException e) {
-                    log.severe("Error occurred when closing class loader: " + e.getMessage(), e);
+                    log.log(Level.SEVERE, "Error occurred when closing class loader: " + e.getMessage(), e);
                 }
             }
         }
@@ -167,7 +168,7 @@ public class TaskLoader {
         //     jarFile = Files.copy(jarFile.toPath(), Paths.get(TASK_FOLDER, jarFile.getName()),
         //             StandardCopyOption.REPLACE_EXISTING).toFile();
         // } catch (IOException e) {
-        //     log.severe("Error occurred when copying JAR file: " + e.getMessage(), e);
+        //     log.log(Level.SEVERE, "Error occurred when copying JAR file: " + e.getMessage(), e);
         //     return null;
         // }
         URLClassLoader classLoader = null;
@@ -189,7 +190,7 @@ public class TaskLoader {
                             String className = entry.getName().replace("/", ".").replace(".class", "");
                             classLoader.loadClass(className);
                         } catch (ClassNotFoundException | NoClassDefFoundError e) {
-                            log.severe("Class not found: " + e.getMessage(), e);
+                            log.log(Level.SEVERE, "Class not found: " + e.getMessage(), e);
                         }
                     }
                 }
@@ -210,13 +211,13 @@ public class TaskLoader {
                 
             }
         } catch (Exception e) {
-            log.severe("Error occurred when loading tasks: " + e.getMessage(), e);
+            log.log(Level.SEVERE, "Error occurred when loading tasks: " + e.getMessage(), e);
         } finally {
             if (classLoader != null) {
                 try {
                     classLoader.close();
                 } catch (IOException e) {
-                    log.severe("Error occurred when closing class loader: " + e.getMessage(), e);
+                    log.log(Level.SEVERE, "Error occurred when closing class loader: " + e.getMessage(), e);
                 }
             }
         }
@@ -227,7 +228,7 @@ public class TaskLoader {
             }
             saveJson();
         } catch (IOException e) {
-            log.severe("Error occurred when saving task to JSON: " + e.getMessage(), e);
+            log.log(Level.SEVERE, "Error occurred when saving task to JSON: " + e.getMessage(), e);
         }
 
         return tasks;
@@ -240,7 +241,7 @@ public class TaskLoader {
         try {
             instance = (Task) clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            log.severe("Error occurred when creating task instance", e);
+            log.log(Level.SEVERE, "Error occurred when creating task instance", e);
             return null;
         }
         return new TaskRecord(
@@ -255,7 +256,7 @@ public class TaskLoader {
                     try {
                         instance.execute();
                     } catch (Exception e) {
-                        log.severe("Error occurred when executing task", e);
+                        log.log(Level.SEVERE, "Error occurred when executing task", e);
                     }
                 });
     }

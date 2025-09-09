@@ -1,6 +1,7 @@
 package com.mdr;
 
 import java.util.Arrays;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,69 +9,22 @@ import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 
 public class Log {
-
-    private Logger logger;
-    private static FileHandler fileHandler = null;
-    static {
+    public static void setup() {
         try {
-            fileHandler = new FileHandler("tasker-output.log", true);
+            System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] %2$s%4$s: %5$s%n%6$s%n");
+            Logger root = Logger.getLogger("");
+            root.setLevel(Level.ALL);
+
+            FileHandler fileHandler = new FileHandler("tasker-output.log", true);
             fileHandler.setFormatter(new SimpleFormatter());
+            root.addHandler(fileHandler);
+
+            ConsoleHandler consoleHandler = new ConsoleHandler();
+            consoleHandler.setFormatter(new SimpleFormatter());
+            root.addHandler(consoleHandler);
         } catch (Exception e) {
             System.err.println("Failed to set up log file handler: " + e.getMessage());
         }
-    }
-
-    private Log(String name) {
-        logger = Logger.getLogger(name);
-    }
-
-    public static Log getLogger(Class<?> clazz) {
-        return getLogger(clazz.getName());
-    }
-
-    public static Log getLogger(String name) {
-        Log log = new Log(name);
-        log.logger.addHandler(fileHandler);
-        log.logger.setUseParentHandlers(false);
-        return log;
-    }
-
-    private String getStackTraceString(Throwable throwable) {
-        return Arrays.stream(throwable.getStackTrace()).map(StackTraceElement::toString)
-                .collect(Collectors.joining("\n"));
-    }
-
-    public void info(String msg) {
-        logger.info(msg);
-        System.out.println(msg);
-    }
-
-    public void info(String msg, Throwable throwable) {
-        logger.log(Level.INFO, msg + "\n" + throwable.getMessage(), throwable);
-        System.out.println(msg + "\n" + throwable.getMessage());
-        throwable.printStackTrace();
-    }
-
-    public void severe(String msg) {
-        logger.severe(msg);
-        System.out.println(msg);
-    }
-
-    public void severe(String msg, Throwable throwable) {
-        logger.log(Level.SEVERE, msg + "\n" + throwable.getMessage(), throwable);
-        System.out.println(msg + "\n" + throwable.getMessage());
-        throwable.printStackTrace();
-    }
-
-    public void warning(String msg) {
-        logger.warning(msg);
-        System.out.println(msg);
-    }
-
-    public void warning(String msg, Throwable throwable) {
-        logger.log(Level.WARNING, msg + "\n" + throwable.getMessage(), throwable);
-        System.out.println(msg + "\n" + throwable.getMessage());
-        throwable.printStackTrace();
     }
 
 }
