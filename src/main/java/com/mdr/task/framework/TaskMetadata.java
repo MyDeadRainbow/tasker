@@ -20,8 +20,7 @@ public @interface TaskMetadata {
     String startTime();
 
     /**
-     * The interval at which the task should run.
-     * in seconds
+     * The interval at which the task should run in seconds.
      */
     int interval();
 

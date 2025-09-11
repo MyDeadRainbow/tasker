@@ -1,1 +1,1 @@
-{"tasks":[{"jarPath":"G:\\Projects\\tasker\\task-runner.jar","classPath":"com.mdr.task.TestTask","startTime":"2023-10-01 10:00:00","interval":10}]}
+{"tasks":[{"jarPath":"G:\\Projects\\tasker\\task-runner.jar","classPath":"com.mdr.TestTask","startTime":"2023-10-01 10:00:00","interval":10}]}

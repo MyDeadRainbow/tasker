@@ -23,12 +23,14 @@ public abstract class Task {
         return interval;
     }
 
-    public final Runnable run() {
+    public final Runnable getRun() {
         return () -> {
             Logger log = Logger.getLogger(this.getClass().getName());
             try {
+                log.log(Level.INFO, "Executing task: " + this.getClass().getName());
+                // System.out.println("Executing task: " + this.getClass().getName());
                 execute();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 log.log(Level.SEVERE, "Error occurred when executing task", e);
             }
         };

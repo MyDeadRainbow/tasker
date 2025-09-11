@@ -40,9 +40,11 @@ public class TaskScheduler {
         LocalDateTime startTime = task.startTime();
         long initialDelay = Duration.between(LocalTime.now(), startTime.toLocalTime()).toSeconds();
         ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> {
-            log.info("Executing task: " + task.classPath());
+            // log.info("Executing task: " + task.classPath());
             // task.task().run();
-            executor.execute(task.task());
+            executor.execute(
+                task.task()
+            );
         }, initialDelay, task.interval(), TimeUnit.SECONDS);
         scheduledTasks.put(task, future);
 

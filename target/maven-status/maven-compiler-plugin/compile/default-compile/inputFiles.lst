@@ -1,12 +1,11 @@
 G:\Projects\tasker\src\main\java\com\mdr\cli\Client.java
-G:\Projects\tasker\src\main\java\com\mdr\cli\CommandListener.java
-G:\Projects\tasker\src\main\java\com\mdr\cli\parser\Action.java
 G:\Projects\tasker\src\main\java\com\mdr\cli\parser\ActionPriority.java
-G:\Projects\tasker\src\main\java\com\mdr\cli\parser\Actions.java
 G:\Projects\tasker\src\main\java\com\mdr\cli\parser\annotations\ActionOrder.java
 G:\Projects\tasker\src\main\java\com\mdr\cli\parser\annotations\Argument.java
 G:\Projects\tasker\src\main\java\com\mdr\cli\parser\Argument.java
+G:\Projects\tasker\src\main\java\com\mdr\cli\parser\ClientArguments.java
 G:\Projects\tasker\src\main\java\com\mdr\cli\parser\Parser.java
+G:\Projects\tasker\src\main\java\com\mdr\cli\parser\ServerArguments.java
 G:\Projects\tasker\src\main\java\com\mdr\Log.java
 G:\Projects\tasker\src\main\java\com\mdr\Props.java
 G:\Projects\tasker\src\main\java\com\mdr\Server.java
@@ -15,7 +14,9 @@ G:\Projects\tasker\src\main\java\com\mdr\task\annotations\ExecuterProcessor.java
 G:\Projects\tasker\src\main\java\com\mdr\task\annotations\Task.java
 G:\Projects\tasker\src\main\java\com\mdr\task\framework\Task.java
 G:\Projects\tasker\src\main\java\com\mdr\task\framework\TaskMetadata.java
+G:\Projects\tasker\src\main\java\com\mdr\task\framework\TaskRecord.java
 G:\Projects\tasker\src\main\java\com\mdr\task\TaskLoader.java
-G:\Projects\tasker\src\main\java\com\mdr\task\TaskRecord.java
-G:\Projects\tasker\src\main\java\com\mdr\task\TestTask.java
 G:\Projects\tasker\src\main\java\com\mdr\TaskScheduler.java
+G:\Projects\tasker\src\main\java\com\mdr\TestTask.java
+G:\Projects\tasker\src\main\java\com\mdr\util\function\QuadConsumer.java
+G:\Projects\tasker\src\main\java\com\mdr\util\function\TriConsumer.java

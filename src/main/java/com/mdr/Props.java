@@ -16,6 +16,8 @@ public class Props<T> {
             "12980", Integer::valueOf);
     public static final Props<DateTimeFormatter> DATE_FORMAT = new Props<>("date.format",
             "yyyy-MM-dd HH:mm:ss", DateTimeFormatter::ofPattern);
+    public static final Props<DateTimeFormatter> DATE_FORMAT_ALTERNATIVE = new Props<>("date.format.alternative",
+            "yyyy/MM/dd HH:mm:ss", DateTimeFormatter::ofPattern);
     public static final Props<String> SERVER_PATH = new Props<>("server.path",
             Paths.get("server.jar").toAbsolutePath().toString(), Function.identity());
     public static final Props<String> SERVER_PID = new Props<>("server.pid",

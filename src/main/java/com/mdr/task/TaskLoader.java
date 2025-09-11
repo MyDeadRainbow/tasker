@@ -135,16 +135,16 @@ public class TaskLoader {
             }
             // Configure Reflections to scan the JAR
             // Reflections reflections = new Reflections(new ConfigurationBuilder()
-            //         .setUrls(ClasspathHelper.forClassLoader(classLoader))
-            //         .setScanners(Scanners.SubTypes));
+            // .setUrls(ClasspathHelper.forClassLoader(classLoader))
+            // .setScanners(Scanners.SubTypes));
 
             // Set<String> taskClassNames = reflections.getStore().get("SubTypes")
-            //         .get("com.mdr.task.framework.Task");
+            // .get("com.mdr.task.framework.Task");
             // for (String string : taskClassNames) {
-                Class<?> clazz = classLoader.loadClass(classPath);
-                TaskMetadata taskAnnotation = clazz.getAnnotation(TaskMetadata.class);
-                task = createTaskRecord(jarPath, clazz, taskAnnotation,
-                        startTime, interval);
+            Class<?> clazz = classLoader.loadClass(classPath);
+            TaskMetadata taskAnnotation = clazz.getAnnotation(TaskMetadata.class);
+            task = createTaskRecord(jarPath, clazz, taskAnnotation,
+                    startTime, interval);
             // }
         } catch (Exception e) {
             log.log(Level.SEVERE, "Error occurred when loading tasks: " + e.getMessage(), e);
@@ -163,14 +163,16 @@ public class TaskLoader {
     public static List<TaskRecord> addTasksFromJar(String jarPath, String overrideStartTime, Integer overrideInterval) {
         File jarFile = new File(jarPath);
 
-        //TODO: decide if i want a plugin folder or just store the path in json
-        //Testing is easier when we just store the path in json
+        // TODO: decide if i want a plugin folder or just store the path in json
+        // Testing is easier when we just store the path in json
         // try {
-        //     jarFile = Files.copy(jarFile.toPath(), Paths.get(TASK_FOLDER, jarFile.getName()),
-        //             StandardCopyOption.REPLACE_EXISTING).toFile();
+        // jarFile = Files.copy(jarFile.toPath(), Paths.get(TASK_FOLDER,
+        // jarFile.getName()),
+        // StandardCopyOption.REPLACE_EXISTING).toFile();
         // } catch (IOException e) {
-        //     log.log(Level.SEVERE, "Error occurred when copying JAR file: " + e.getMessage(), e);
-        //     return null;
+        // log.log(Level.SEVERE, "Error occurred when copying JAR file: " +
+        // e.getMessage(), e);
+        // return null;
         // }
         URLClassLoader classLoader = null;
         List<TaskRecord> tasks = new ArrayList<>();
@@ -209,7 +211,6 @@ public class TaskLoader {
                 TaskRecord task = createTaskRecord(jarPath, clazz, taskAnnotation,
                         overrideStartTime, overrideInterval);
 
-                
             }
         } catch (Exception e) {
             log.log(Level.SEVERE, "Error occurred when loading tasks: " + e.getMessage(), e);
@@ -241,12 +242,13 @@ public class TaskLoader {
         final Task instance;
         try {
             LocalDateTime startTime = LocalDateTime.parse(overrideStartTime != null
-                        ? overrideStartTime
-                        : taskAnnotation.startTime(),
-                        Props.DATE_FORMAT.get());
+                    ? overrideStartTime
+                    : taskAnnotation.startTime(),
+                    Props.DATE_FORMAT.get());
 
             int interval = overrideInterval != null ? overrideInterval : taskAnnotation.interval();
-            instance = (Task) clazz.getDeclaredConstructor().newInstance(startTime, interval);
+            instance = (Task) clazz.getDeclaredConstructor(LocalDateTime.class, int.class)
+                    .newInstance(startTime, interval);
         } catch (Exception e) {
             log.log(Level.SEVERE, "Error occurred when creating task instance", e);
             return null;
@@ -256,7 +258,6 @@ public class TaskLoader {
                 instance.getClass().getName(),
                 instance.getStartTime(),
                 instance.getInterval(),
-                instance.run()
-                );
+                instance.getRun());
     }
 }
