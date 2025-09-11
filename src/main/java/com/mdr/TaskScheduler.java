@@ -14,7 +14,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import com.mdr.task.TaskRecord;
+import com.mdr.task.framework.TaskRecord;
 
 public class TaskScheduler {
     private static final Logger log = Logger.getLogger(TaskScheduler.class.getName());

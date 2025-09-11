@@ -5,12 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 import com.mdr.Log;
 import com.mdr.cli.parser.ActionPriority;
+import com.mdr.cli.parser.Argument;
 import com.mdr.cli.parser.ClientArguments;
 
 public class Client {
+    private static final Logger log = Logger.getLogger(Client.class.getName());
     public static void main(String[] args) {
         Log.setup();
         args = List.of(
@@ -21,16 +24,17 @@ public class Client {
         "-add", "G:\\Projects\\email-task\\target\\email-task-1.0-SNAPSHOT-fat.jar"//<jarPath> [overrideStartTime] [overrideInterval]"
         ).toArray(String[]::new);
 
-        Map<ClientArguments, String> actions = parseArgs(args);
+        Map<Argument, String> actions = parseArgs(args);
         actions.forEach((action, value) -> {
-            System.out.println("Action: " + action.name());
             action.process(value);
         });
         
     }
 
-    private static Map<ClientArguments, String> parseArgs(String[] args) {
-        Map<ClientArguments, String> actions = new TreeMap<>((a, b) -> {
+    //TODO: This method is to coupled to ClientArguments. I want to be able to get any version of Argument
+    private static Map<Argument, String> parseArgs(String[] args) {
+        Map<Argument, String> actions = new TreeMap<>((a, b) -> {
+            //TODO:Figure out how to order arguments or if i need to support multiple arguments in one command
             if (a.getPriority() == ActionPriority.EXCLUSIVE || b.getPriority() == ActionPriority.EXCLUSIVE) {
                 if (a.getPriority() == ActionPriority.EXCLUSIVE && b.getPriority() == ActionPriority.EXCLUSIVE) {
                     return 0;
@@ -40,9 +44,9 @@ public class Client {
                     return 1;
                 }
             }
-            if (a.getPriority() == b.getPriority()) {
-                return a.compareTo(b);
-            }
+            // if (a.getPriority() == b.getPriority()) {
+            //     return a.compareTo(b);
+            // }
             return a.getPriority().compareTo(b.getPriority());
         });
         for (int i = 0; i < args.length;) {
@@ -58,7 +62,7 @@ public class Client {
                     }
                 }
                 if (actions.containsKey(action)) {
-                    action.onError.accept("Duplicate argument: " + Arrays.toString(action.getIdentifiers()) + " " + value
+                    log.warning("Duplicate argument: " + Arrays.toString(action.getIdentifiers()) + " " + value
                             + ". Only the first occurrence will be processed.");
                 }
                 actions.putIfAbsent(action, value.toString().trim());

@@ -30,6 +30,7 @@ import org.reflections.util.ConfigurationBuilder;
 import com.mdr.Props;
 import com.mdr.task.framework.Task;
 import com.mdr.task.framework.TaskMetadata;
+import com.mdr.task.framework.TaskRecord;
 
 public class TaskLoader {
     private static final Logger log = Logger.getLogger(TaskLoader.class.getName());
@@ -239,7 +240,13 @@ public class TaskLoader {
 
         final Task instance;
         try {
-            instance = (Task) clazz.getDeclaredConstructor().newInstance();
+            LocalDateTime startTime = LocalDateTime.parse(overrideStartTime != null
+                        ? overrideStartTime
+                        : taskAnnotation.startTime(),
+                        Props.DATE_FORMAT.get());
+
+            int interval = overrideInterval != null ? overrideInterval : taskAnnotation.interval();
+            instance = (Task) clazz.getDeclaredConstructor().newInstance(startTime, interval);
         } catch (Exception e) {
             log.log(Level.SEVERE, "Error occurred when creating task instance", e);
             return null;
@@ -247,17 +254,9 @@ public class TaskLoader {
         return new TaskRecord(
                 jarPath,
                 instance.getClass().getName(),
-                LocalDateTime.parse(overrideStartTime != null
-                        ? overrideStartTime
-                        : taskAnnotation.startTime(),
-                        Props.DATE_FORMAT.get()),
-                overrideInterval != null ? overrideInterval : taskAnnotation.interval(),
-                (Runnable) () -> {
-                    try {
-                        instance.execute();
-                    } catch (Exception e) {
-                        log.log(Level.SEVERE, "Error occurred when executing task", e);
-                    }
-                });
+                instance.getStartTime(),
+                instance.getInterval(),
+                instance.run()
+                );
     }
 }

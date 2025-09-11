@@ -1,13 +1,16 @@
-package com.mdr.task;
+package com.mdr;
 
 import java.time.LocalDateTime;
 
-import com.mdr.Props;
 import com.mdr.task.framework.Task;
 import com.mdr.task.framework.TaskMetadata;
 
-@TaskMetadata(name = "Test Task", startTime = "2023-10-01 10:00:00", interval = 10)
-public class TestTask implements Task {
+@TaskMetadata(startTime = "2023-10-01 10:00:00", interval = 10)
+public class TestTask extends Task {
+
+    public TestTask(LocalDateTime startTime, int interval) {
+        super(startTime, interval);
+    }    
 
     @Override
     public void execute() {
@@ -20,7 +23,6 @@ public class TestTask implements Task {
         TaskMetadata task = this.getClass().getAnnotation(TaskMetadata.class);
         if (task != null) {
             return "TestTask{" +
-                    "name='" + task.name() + '\'' +
                     ", startTime='" + task.startTime() + '\'' +
                     ", interval=" + task.interval() +
                     '}';

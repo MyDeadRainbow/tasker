@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import com.mdr.Props;
 import com.mdr.TaskScheduler;
 import com.mdr.task.TaskLoader;
-import com.mdr.task.TaskRecord;
+import com.mdr.task.framework.TaskRecord;
 import com.mdr.util.function.TriConsumer;
 
 public enum ServerArguments implements Argument {

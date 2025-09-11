@@ -1,4 +1,4 @@
-package com.mdr.task;
+package com.mdr.task.framework;
 
 import java.time.LocalDateTime;
 
