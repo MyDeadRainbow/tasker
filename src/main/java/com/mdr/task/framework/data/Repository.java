@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,250 +18,38 @@ import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-// public class Repository<T extends Storable> implements Map<String, T> {
-//     Class<T> itemClass;
-//     Repository<T> parent;
-//     File folder;
-
-//     Logger log = Logger.getLogger(this.getClass().getName());
-
-//     @Override
-//     public int size() {
-//         return listStored().size();
-//     }
-
-//     @Override
-//     public boolean isEmpty() {
-//         return !folder.exists() || folder.listFiles().length == 0;
-//     }
-
-//     @Override
-//     public boolean containsKey(Object key) {
-//         return findById((String) key) != null;
-//     }
-
-//     @Override
-//     public boolean containsValue(Object value) {
-//         return listStored().contains(value);
-//     }
-
-//     @Override
-//     public T get(Object key) {
-//         return findById((String) key);
-//     }
-
-//     @Override
-//     public T put(String key, T value) {
-//         try {
-//             save(value);
-//         } catch (IOException e) {
-//             log.log(Level.SEVERE, "Failed to save item with key: " + key, e);
-//         }
-//         return value;
-//     }
-
-//     @Override
-//     public T remove(Object key) {
-//         T item = findById((String) key);
-//         if (item != null) {
-//             item.file.delete();
-//         }
-//         return item;
-//     }
-
-//     @Override
-//     public void putAll(Map<? extends String, ? extends T> m) {
-//         for (Entry<? extends String, ? extends T> entry : m.entrySet()) {
-//             put(entry.getKey(), entry.getValue());
-//         }
-//     }
-
-//     @Override
-//     public void clear() {
-//         for (T item : listStored()) {
-//             item.file.delete();
-//         }
-//     }
-
-//     @Override
-//     public Set<String> keySet() {
-//         Set<String> keys = new HashSet<>();
-//         for (T item : listStored()) {
-//             keys.add(item.getId());
-//         }
-//         return keys;
-//     }
-
-//     @Override
-//     public Collection<T> values() {
-//         return listStored();
-//     }
-
-//     @Override
-//     public Set<Entry<String, T>> entrySet() {
-//         Set<Entry<String, T>> entries = new HashSet<>();
-//         for (T item : listStored()) {
-//             entries.add(new AbstractMap.SimpleEntry<>(item.getId(), item));
-//         }
-//         return entries;
-//     }
-
-//     public Repository(Repository<T> parent, String folder, Class<T> itemClass) {
-//         this.parent = parent;
-//         this.folder = new File(parent.folder, folder);
-//         this.itemClass = itemClass;
-//         if (!this.folder.exists()) {
-//             this.folder.mkdirs();
-//         }
-//     }
-
-//     public Repository(String folder, Class<T> itemClass) {
-//         this.folder = new File(folder);
-//         this.itemClass = itemClass;
-//         if (!this.folder.exists()) {
-//             this.folder.mkdirs();
-//         }
-//     }
-
-//     public Repository<T> newChild(String folder) {
-//         return new Repository<>(this, folder, itemClass);
-//     }    
-
-//     private File save(T item) throws IOException {
-//         if (item == null) {
-//             throw new IllegalArgumentException("Item cannot be null");
-//         }
-//         return item.store(folder);
-//     }
-
-//     public File getFolder() {
-//         return folder;
-//     }
-
-//     public List<T> listStored() {
-//         List<T> items = new ArrayList<>();
-//         File[] files = folder.listFiles();
-//         if (files != null) {
-//             for (File file : files) {
-//                 try {
-//                     T item = itemClass.getDeclaredConstructor(File.class).newInstance(file);
-//                     items.add(item);
-//                 } catch (Exception e) {
-//                     log.warning("Failed to load item from file: " + file.getAbsolutePath() + " - " + e.getMessage());
-//                 }
-//             }
-//         }
-//         return items;
-//     }
-
-//     public T findById(String id) {
-//         List<T> items = listStored();
-//         for (T item : items) {
-//             if (item.getId().equals(id)) {
-//                 return item;
-//             }
-//         }
-//         return null;
-//     }
-
-//     public boolean contains(String id) {
-//         return findById(id) != null;
-//     }
-
-// }
-
-// public class Repository implements Map<String, File> {
-//     private final Map<String, File> internalMap = new HashMap<>();
-//     private final File folder;
-
-//     public Repository(File folder) {
-//         this.folder = folder;
-//     }
-
-//     public File getFolder() {
-//         return folder;
-//     }
-
-//     @Override
-//     public int size() {
-//         return internalMap.size();
-//     }
-
-//     @Override
-//     public boolean isEmpty() {
-//         return internalMap.isEmpty();
-//     }
-
-//     @Override
-//     public boolean containsKey(Object key) {
-//         return internalMap.containsKey(key);
-//     }
-
-//     @Override
-//     public boolean containsValue(Object value) {
-//         return internalMap.containsValue(value);
-//     }
-
-//     @Override
-//     public File get(Object key) {
-//         return internalMap.get(key);
-//     }
-
-//     @Override
-//     public File put(String key, File value) {
-//         return internalMap.put(key, new File(folder, value.getName()));
-//     }
-
-//     @Override
-//     public File remove(Object key) {
-//         return internalMap.remove(key);
-//     }
-
-//     @Override
-//     public void putAll(Map<? extends String, ? extends File> m) {
-//         internalMap.putAll(m);
-//     }
-
-//     @Override
-//     public void clear() {
-//         internalMap.clear();
-//     }
-
-//     @Override
-//     public Set<String> keySet() {
-//         return internalMap.keySet();
-//     }
-
-//     @Override
-//     public Collection<File> values() {
-//         return internalMap.values();
-//     }
-
-//     @Override
-//     public Set<Entry<String, File>> entrySet() {
-//         return internalMap.entrySet();
-//     }
-// }
-
 public class Repository extends Storable implements Map<String, Storable> {
     private File folder;
     private final Map<String, Storable> internalMap = new HashMap<>();
 
     public Repository(String name) throws IOException {
+        this(name, null);
+
+    }
+
+    public Repository(String name, Repository parent) throws IOException {
         super(name);
-        this.folder = new File(name);
+        // setParent is called and folder is updated in put
+        if (parent != null) {
+            parent.put(name, this);
+        } else {
+            this.folder = new File(name);
+        }
+
         if (!folder.exists()) {
             folder.mkdirs();
         }
         this.load();
     }
 
-    public Repository(String name, Repository parent) throws IOException {
-        this(name);
-        //setParent is called and folder is updated in put
-        parent.put(name, this);
-    }
-
+    /**
+     * Get the folder where this repository is stored.
+     * If the repository has a parent, the folder is relative to the parent's
+     * folder.
+     * If the repository has no parent, the folder is absolute.
+     * 
+     * @return The folder where this repository is stored.
+     */
     public File getFolder() {
         if (parent != null) {
             return new File(parent.getFolder(), name);
@@ -268,37 +57,82 @@ public class Repository extends Storable implements Map<String, Storable> {
         return folder;
     }
 
+    /**
+     * Set the parent repository and update the folder accordingly.
+     * 
+     * @param parent The parent repository.
+     */
     @Override
-    public void setParent(Repository parent) {
+    protected void setParent(Repository parent) {
         this.parent = parent;
         this.folder = getFolder();
     }
 
+    /**
+     * Returns the number of key-value mappings in this map. If the map contains
+     * more than {@link Integer#MAX_VALUE} elements, returns
+     * {@link Integer#MAX_VALUE}.
+     * 
+     * @return the number of key-value mappings in this map
+     */
     @Override
     public int size() {
         return internalMap.size();
     }
 
+    /**
+     * @return true if this map contains no key-value mappings
+     */
     @Override
     public boolean isEmpty() {
         return internalMap.isEmpty();
     }
 
+    /**
+     * @param key
+     * @return true if this map contains a mapping for the specified key
+     */
     @Override
     public boolean containsKey(Object key) {
         return internalMap.containsKey(key);
     }
 
+    /**
+     * @param value
+     * @return true if this map maps one or more keys to the specified value
+     */
     @Override
     public boolean containsValue(Object value) {
         return internalMap.containsValue(value);
     }
 
+    /**
+     * @param key
+     * @return the value to which the specified key is mapped, or null if this map
+     *         contains no mapping for the key
+     */
     @Override
     public Storable get(Object key) {
         return internalMap.get(key);
     }
 
+    /**
+     * Preferred method to add a storable to the repository
+     * 
+     * @param value
+     * @return
+     */
+    public Storable put(Storable value) {
+        return put(value.getName(), value);
+    }
+
+    /**
+     * Add the storable to the repository and store it in the filesystem
+     * It is preffered to use {@link #put(Storable)} instead
+     * 
+     * @param key
+     * @param value
+     */
     @Override
     public Storable put(String key, Storable value) {
         value.setParent(this);
@@ -312,14 +146,53 @@ public class Repository extends Storable implements Map<String, Storable> {
         return internalMap.put(key, value);
     }
 
+    /**
+     * Remove the storable from the repository and delete it from the filesystem
+     * 
+     * @param key
+     * @return the previous value associated with key, or null if there was no
+     *         mapping for key.
+     *         (A null return can also indicate that the map previously associated
+     *         null with key.)
+     */
     @Override
     public Storable remove(Object key) {
-        return internalMap.remove(key);
+        Storable value = internalMap.remove(key);
+        if (value != null) {
+            try {
+                value.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return value;
     }
 
+    /**
+     * Preffered method to add multiple storables to the repository
+     * Add all storables to the repository and store them in the filesystem
+     * It is preffered to use {@link #put(Storable)} instead
+     * 
+     * @param storables
+     */
+    public void putAll(Storable... storables) {
+        for (Storable storable : storables) {
+            put(storable);
+        }
+    }
+
+    /**
+     * Use {@link #putAll(Storable...)} instead
+     * Add all storables to the repository and store them in the filesystem
+     * It is preffered to use {@link #put(Storable)} instead
+     * 
+     * @param storables
+     */
     @Override
     public void putAll(Map<? extends String, ? extends Storable> m) {
-        internalMap.putAll(m);
+        for (Entry<? extends String, ? extends Storable> entry : m.entrySet()) {
+            put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
@@ -357,16 +230,25 @@ public class Repository extends Storable implements Map<String, Storable> {
         if (!folder.exists()) {
             throw new IOException("Repository folder does not exist: " + folder.getAbsolutePath());
         }
-        // if (parent != null) {
-        //     // parent.load();
-        // }
+
+        StorableFactory storableFactory = new StorableFactory();
         for (File file : folder.listFiles()) {
-            Storable item = StorableFactory.create(file, this);
+            Storable item = storableFactory.create(file, this);
             if (item != null) {
                 internalMap.put(item.getName(), item);
             }
         }
         return this;
+    }
+
+    @Override
+    public void delete() throws IOException {
+        for (Storable item : internalMap.values()) {
+            item.delete();
+        }
+        if (folder.exists() && folder.isDirectory()) {
+            folder.delete();
+        }
     }
 
     @Override
@@ -389,8 +271,14 @@ class StorableFactory {
             throw new RuntimeException(e);
         }
     }
-    public static Storable create(File file, Repository parent) {
-        String name = file.getName();
+    final static Set<String> storableNames = new HashSet<>();
+
+    /**
+     * Create a StorableFactory that can create Storable instances from files.
+     * Construction is expensive as it uses reflection to find all classes that
+     * extend Storable.
+     */
+    public StorableFactory() {
         // get storables from reflection
         ClassLoader classLoader = new URLClassLoader(new URL[] { url },
                 ClassLoader.getSystemClassLoader());
@@ -399,15 +287,32 @@ class StorableFactory {
                 .setUrls(ClasspathHelper.forClassLoader(classLoader))
                 .setScanners(Scanners.SubTypes));
 
-        Set<String> storableNames = reflections.getStore().get("SubTypes")
-                .get("com.mdr.task.framework.data.Storable");
+        storableNames.addAll(reflections.getStore().get("SubTypes")
+                .get("com.mdr.task.framework.data.Storable"));
+    }
 
+    /**
+     * Create a Storable instance from a file.
+     * Uses reflection to find the appropriate Storable subclass for the file.
+     * See {@link Storable#matchType(File)} for how the appropriate subclass is
+     * determined.
+     * 
+     * @param file   The file to create the Storable from.
+     * @param parent The parent repository of the Storable.
+     * @return The created Storable, or null if no appropriate subclass was found.
+     */
+    public Storable create(File file, Repository parent) {
+        String name = file.getName();
         for (String storableName : storableNames) {
             try {
                 Class<?> clazz = Class.forName(storableName);
                 Method matchTypeMethod = clazz.getDeclaredMethod("matchType", File.class);
-                // boolean matches = (boolean) matchTypeMethod.invoke(storable, file);
                 if (Storable.class.isAssignableFrom(clazz)) {
+                    if (clazz == Repository.class) {
+                        // special case for Repository to pass parent
+                        Storable storable = new Repository(name, parent);
+                        return storable;
+                    }
 
                     Storable storable = (Storable) clazz.getConstructor(String.class).newInstance(name);
                     if (!(boolean) matchTypeMethod.invoke(storable, file)) {
@@ -415,10 +320,7 @@ class StorableFactory {
                     }
                     storable.setParent(parent);
                     storable.load();
-                    // storable.load();
-                    // Storable<?> storable = (Storable<?>)
-                    // clazz.getDeclaredConstructor(String.class).newInstance(name);
-                    return storable;//parent.put(name, storable);
+                    return storable;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -428,49 +330,19 @@ class StorableFactory {
     }
 }
 
-abstract class Storable {
-    Repository parent;
-    final String name;
-
-    private Storable() {
-        this.name = null;
-    }
-
-    public Storable(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    void setParent(Repository parent) {
-        this.parent = parent;
-    }
-
-    abstract void store() throws IOException;
-
-    abstract Storable load() throws IOException;
-
-    abstract Object get();
-
-    abstract boolean matchType(File file);
-}
-
 class TestRunner {
     public static void main(String[] args) throws IOException {
         Repository repo1 = new Repository("data");
-        Repository repo = (Repository) repo1.get("data2");
+        Repository repo = new Repository("data2", repo1);
         // try {
-        //     repo1.load();
+        // repo1.load();
         // } catch (IOException e1) {
-        //     // TODO Auto-generated catch block
-        //     e1.printStackTrace();
+        // // TODO Auto-generated catch block
+        // e1.printStackTrace();
         // }
         // repo.put("example", new StorableFile("example.txt", "This is a test file."));
-        // repo.put("greeting", new StorableString("greeting.txt", "Hello, World!"));
-        // repo.put("config", new StorableJson("config.json", new
-        // JSONObject().put("key", "value")));
+        repo.put(new StorableString("greeting.txt", "Hello, World!"));
+        repo.put(new StorableJson("config.json", new JSONObject().put("key", "value")));
         System.out.println("Repository size: " + repo.size());
         try {
             // StorableFile storedFile = (StorableFile) repo.get("example");
@@ -490,6 +362,9 @@ class TestRunner {
                 JSONObject json = storedJson.load().get();
                 System.out.println("Loaded JSON: " + json.toString(4));
             }
+            repo1.delete();
+            // repo.remove(storedJson.getName());
+            // repo1.remove("data2");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -537,6 +412,9 @@ class TestRunner {
     // }
 
     private static class StorableString extends Storable {
+        static {
+            StorableFactory.storableNames.add(StorableString.class.getName());
+        }
 
         String text;
 
@@ -592,6 +470,9 @@ class TestRunner {
     }
 
     private static class StorableJson extends Storable {
+        static {
+            StorableFactory.storableNames.add(StorableJson.class.getName());
+        }
 
         JSONObject json;
 

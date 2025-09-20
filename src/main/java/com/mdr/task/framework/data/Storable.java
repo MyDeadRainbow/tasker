@@ -1,80 +1,79 @@
 package com.mdr.task.framework.data;
 
 import java.io.File;
-import java.util.Map;
+import java.io.IOException;
 
-// public abstract class Storable {
+abstract class Storable {
+    Repository parent;
+    final String name;
 
-//     public final File file;
+    /**
+     * Create a storable with the given name.
+     * The name is used as the filename in the repository folder.
+     * 
+     * @param name
+     */
+    public Storable(String name) {
+        this.name = name;
+    }
 
-//     public Storable(File file) {
-//         this.file = file;
-//     }
+    public String getName() {
+        return name;
+    }
 
-//     public abstract File store(File parentFolder) throws IOException;
-//     public abstract String getId();
-//     public abstract File getFile();
-// }
+    void setParent(Repository parent) {
+        this.parent = parent;
+    }
 
-// public class Storable implements Map<String, File> {
+    /**
+     * Store the storable in the filesystem.
+     * The storable is stored in the folder of the parent repository.
+     * 
+     * @throws IOException
+     */
+    abstract void store() throws IOException;
 
-//     @Override
-//     public int size() {
-//         return 0;
-//     }
+    /**
+     * Load the storable from the filesystem.
+     * The storable is loaded from the folder of the parent repository.
+     * 
+     * @throws IOException
+     */
+    abstract Storable load() throws IOException;
 
-//     @Override
-//     public boolean isEmpty() {
-//         return false;
-//     }
+    /**
+     * Delete the storable from the filesystem.
+     * The storable is deleted from the folder of the parent repository.
+     * 
+     * @throws IOException
+     */
+    public void delete() throws IOException {
+        File file = new File(parent.getFolder(), getName());
+        if (file.exists()) {
+            if (!file.delete()) {
+                throw new IOException("Failed to delete file: " + file.getAbsolutePath());
+            }
+        }
+    }
 
-//     @Override
-//     public boolean containsKey(Object key) {
-//         return false;
-//     }
+    /**
+     * Get the value stored in the storable.
+     * The type of the value depends on the implementation of the storable.
+     * Intended to return the Object representation of the underlying file.
+     * 
+     * @return the value stored in the storable.
+     */
+    abstract Object get();
 
-//     @Override
-//     public boolean containsValue(Object value) {
-//         return false;
-//     }
-
-//     @Override
-//     public File get(Object key) {
-//         return null;
-//     }
-
-//     @Override
-//     public File put(String key, File value) {
-//         return null;
-//     }
-
-//     @Override
-//     public File remove(Object key) {
-//         return null;
-//     }
-
-//     @Override
-//     public void putAll(Map<? extends String, ? extends File> m) {
-
-//     }
-
-//     @Override
-//     public void clear() {
-
-//     }
-
-//     @Override
-//     public java.util.Set<String> keySet() {
-//         return null;
-//     }
-
-//     @Override
-//     public java.util.Collection<File> values() {
-//         return null;
-//     }
-
-//     @Override
-//     public java.util.Set<Entry<String, File>> entrySet() {
-//         return null;
-//     }
-// }
+    /**
+     * Check if the file matches the type of the storable.
+     * Used by the {@link StorableFactory} to determine which storable to create for
+     * a given file.
+     * {@link StorableFactory} uses reflection to call this method and decide what
+     * type of storable to create.
+     * 
+     * @param file
+     * @return true if the file matches the type of the storable.
+     */
+    abstract boolean matchType(File file);
+}
