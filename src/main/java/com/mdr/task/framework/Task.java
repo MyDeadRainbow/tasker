@@ -10,7 +10,13 @@ public abstract class Task {
     private LocalDateTime startTime;
     private int interval;
 
-    protected Task(LocalDateTime startTime, int interval) {
+    protected Task(LocalDateTime startTime, int interval) throws TaskInitializationException {
+        if (startTime == null) {
+            throw new TaskInitializationException("Start time cannot be null");
+        }
+        if (interval <= 0) {
+            throw new TaskInitializationException("Interval must be positive");
+        }
         this.startTime = startTime;
         this.interval = interval;
     }

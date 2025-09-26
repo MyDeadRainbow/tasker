@@ -3,12 +3,13 @@ package com.mdr;
 import java.time.LocalDateTime;
 
 import com.mdr.task.framework.Task;
+import com.mdr.task.framework.TaskInitializationException;
 import com.mdr.task.framework.TaskMetadata;
 
 @TaskMetadata(startTime = "2023-10-01 10:00:00", interval = 10)
 public class TestTask extends Task {
 
-    public TestTask(LocalDateTime startTime, int interval) {
+    public TestTask(LocalDateTime startTime, int interval) throws TaskInitializationException {
         super(startTime, interval);
     }    
 

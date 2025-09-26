@@ -64,7 +64,7 @@
                 <version>3.5.1</version>
                 <executions>
                     <execution>
-                        <id>shade-server</id>
+                        <id>server:shade</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -97,6 +97,42 @@
                             </transformers>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>default-jar:shade</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>lib</shadedClassifierName>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.reflections:reflections</include>
+                                    <include>org.slf4j:*</include>
+                                    <include>org.javassist:*</include>
+                                </includes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <!-- <artifact>org.reflections:reflections</artifact> -->
+
+                                    <!-- <artifact>org.json:json</artifact>
+                                    <artifact>org.reflections:reflections</artifact> -->
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <!-- <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.mdr.Server</mainClass>
+                                </transformer>
+                            </transformers> -->
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -113,7 +149,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.1</version>
                 <executions>
-                    <execution>
+                    <!-- <execution>
                         <id>default-jar</id>
                         <phase>package</phase>
                         <goals>
@@ -125,8 +161,8 @@
                                 </manifest>
                             </archive>
                         </configuration>
-                    </execution>
-                    <execution>
+                    </execution> -->
+                    <!-- <execution>
                         <id>server-jar</id>
                         <phase>package</phase>
                         <goals>
@@ -140,7 +176,7 @@
                                 </manifest>
                             </archive>
                         </configuration>
-                    </execution>
+                    </execution> -->
                 </executions>
             </plugin>
             <plugin>
@@ -153,7 +189,7 @@
                         <phase>package</phase>
                         <configuration>
                             <target>
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.basedir}/task-runner.jar" overwrite="true" />
+                                <copy file="${project.build.directory}/${project.build.finalName}-lib.jar" tofile="${project.basedir}/task-runner.jar" overwrite="true" />
                                 <copy file="${project.build.directory}/${project.build.finalName}-fat.jar" tofile="${project.basedir}/server.jar" overwrite="true" />
                             </target>
                         </configuration>

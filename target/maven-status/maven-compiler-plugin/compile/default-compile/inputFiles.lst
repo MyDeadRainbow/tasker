@@ -15,6 +15,7 @@ G:\Projects\tasker\src\main\java\com\mdr\task\annotations\Task.java
 G:\Projects\tasker\src\main\java\com\mdr\task\framework\data\Repository.java
 G:\Projects\tasker\src\main\java\com\mdr\task\framework\data\Storable.java
 G:\Projects\tasker\src\main\java\com\mdr\task\framework\Task.java
+G:\Projects\tasker\src\main\java\com\mdr\task\framework\TaskInitializationException.java
 G:\Projects\tasker\src\main\java\com\mdr\task\framework\TaskMetadata.java
 G:\Projects\tasker\src\main\java\com\mdr\task\framework\TaskRecord.java
 G:\Projects\tasker\src\main\java\com\mdr\task\TaskLoader.java

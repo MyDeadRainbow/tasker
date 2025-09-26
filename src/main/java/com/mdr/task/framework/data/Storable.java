@@ -3,7 +3,7 @@ package com.mdr.task.framework.data;
 import java.io.File;
 import java.io.IOException;
 
-abstract class Storable {
+public abstract class Storable {
     Repository parent;
     final String name;
 
@@ -31,7 +31,7 @@ abstract class Storable {
      * 
      * @throws IOException
      */
-    abstract void store() throws IOException;
+    public abstract void store() throws IOException;
 
     /**
      * Load the storable from the filesystem.
@@ -39,7 +39,7 @@ abstract class Storable {
      * 
      * @throws IOException
      */
-    abstract Storable load() throws IOException;
+    public abstract Storable load() throws IOException;
 
     /**
      * Delete the storable from the filesystem.
@@ -57,13 +57,23 @@ abstract class Storable {
     }
 
     /**
+     * Get the folder where the storable is stored.
+     * The folder is the folder of the parent repository.
+     * 
+     * @return the folder where the storable is stored.
+     */
+    public File getFolder() {
+        return parent.getFolder();
+    }
+
+    /**
      * Get the value stored in the storable.
      * The type of the value depends on the implementation of the storable.
      * Intended to return the Object representation of the underlying file.
      * 
      * @return the value stored in the storable.
      */
-    abstract Object get();
+    public abstract Object get();
 
     /**
      * Check if the file matches the type of the storable.
@@ -75,5 +85,5 @@ abstract class Storable {
      * @param file
      * @return true if the file matches the type of the storable.
      */
-    abstract boolean matchType(File file);
+    public abstract boolean matchType(File file);
 }

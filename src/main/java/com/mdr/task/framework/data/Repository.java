@@ -3,6 +3,7 @@ package com.mdr.task.framework.data;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 import org.reflections.Reflections;
@@ -21,6 +24,7 @@ import org.reflections.util.ConfigurationBuilder;
 public class Repository extends Storable implements Map<String, Storable> {
     private File folder;
     private final Map<String, Storable> internalMap = new HashMap<>();
+    private final Logger log;
 
     public Repository(String name) throws IOException {
         this(name, null);
@@ -40,6 +44,7 @@ public class Repository extends Storable implements Map<String, Storable> {
             folder.mkdirs();
         }
         this.load();
+        this.log = Logger.getLogger(this.getClass().getName() + "{" + folder.getAbsolutePath() + "}");
     }
 
     /**
@@ -139,8 +144,7 @@ public class Repository extends Storable implements Map<String, Storable> {
         try {
             value.store();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Error occurred when storing storable", e);
             return null;
         }
         return internalMap.put(key, value);
@@ -216,7 +220,7 @@ public class Repository extends Storable implements Map<String, Storable> {
     }
 
     @Override
-    void store() throws IOException {
+    public void store() throws IOException {
         if (!getFolder().exists()) {
             getFolder().mkdirs();
         }
@@ -226,7 +230,7 @@ public class Repository extends Storable implements Map<String, Storable> {
     }
 
     @Override
-    Repository load() throws IOException {
+    public Repository load() throws IOException {
         if (!folder.exists()) {
             throw new IOException("Repository folder does not exist: " + folder.getAbsolutePath());
         }
@@ -252,12 +256,12 @@ public class Repository extends Storable implements Map<String, Storable> {
     }
 
     @Override
-    Map<String, Storable> get() {
+    public Map<String, Storable> get() {
         return internalMap;
     }
 
     @Override
-    boolean matchType(File file) {
+    public boolean matchType(File file) {
         return file.isDirectory();
     }
 }
@@ -307,14 +311,17 @@ class StorableFactory {
             try {
                 Class<?> clazz = Class.forName(storableName);
                 Method matchTypeMethod = clazz.getDeclaredMethod("matchType", File.class);
+                matchTypeMethod.setAccessible(true);
                 if (Storable.class.isAssignableFrom(clazz)) {
                     if (clazz == Repository.class) {
                         // special case for Repository to pass parent
                         Storable storable = new Repository(name, parent);
                         return storable;
                     }
-
-                    Storable storable = (Storable) clazz.getConstructor(String.class).newInstance(name);
+                    Constructor<?> constructor = clazz.getConstructor(String.class);
+                    constructor.setAccessible(true);
+                    
+                    Storable storable = (Storable) constructor.newInstance(name);
                     if (!(boolean) matchTypeMethod.invoke(storable, file)) {
                         continue;
                     }
@@ -464,7 +471,7 @@ class TestRunner {
         }
 
         @Override
-        boolean matchType(File file) {
+        public boolean matchType(File file) {
             return file.getName().endsWith(".txt");
         }
     }
@@ -522,7 +529,7 @@ class TestRunner {
         }
 
         @Override
-        boolean matchType(File file) {
+        public boolean matchType(File file) {
             return file.getName().endsWith(".json");
         }
     }

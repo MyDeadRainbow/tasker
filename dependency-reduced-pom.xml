@@ -11,7 +11,7 @@
         <version>3.5.1</version>
         <executions>
           <execution>
-            <id>shade-server</id>
+            <id>server:shade</id>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
@@ -36,6 +36,33 @@
               </transformers>
             </configuration>
           </execution>
+          <execution>
+            <id>default-jar:shade</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>lib</shadedClassifierName>
+              <artifactSet>
+                <includes>
+                  <include>org.reflections:reflections</include>
+                  <include>org.slf4j:*</include>
+                  <include>org.javassist:*</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -49,35 +76,6 @@
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.4.1</version>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <archive>
-                <manifest />
-              </archive>
-            </configuration>
-          </execution>
-          <execution>
-            <id>server-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <classifier>server</classifier>
-              <archive>
-                <manifest>
-                  <mainClass>com.mdr.Server</mainClass>
-                </manifest>
-              </archive>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -101,6 +99,12 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20250517</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
